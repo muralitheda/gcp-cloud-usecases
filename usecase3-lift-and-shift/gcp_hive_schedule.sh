@@ -10,7 +10,7 @@ echo "`date` error occured in the hive table creation part of the EL" &> /tmp/gc
 else
 echo "`date` hive table creation part of the EL is completed successfully" &> /tmp/gcp_hive_schedule.log
 fi 
- 
+
 #in onprem I was calling hive queries like this “hive –e "load data inpath '/user/ashfaqalamlearning/project/txns' overwrite into table transactions" “
 gcloud dataproc jobs submit hive --cluster=cluster-iz-dplr --region us-central1 -e "load data inpath '/user/ashfaqalamlearning/project/txns' overwrite into table transactions" &> /tmp/gcp_hive_schedule.log
 if [ $? -ne 0 ]
