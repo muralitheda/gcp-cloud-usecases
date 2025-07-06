@@ -16,32 +16,32 @@ def main():
    conf.set("fs.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem")
    conf.set("fs.AbstractFileSystem.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS")
 
-   print("Use Spark Application to Read csv data from cloud GCS and get a DF created with the GCS data in the on prem, "
+   print("[INFO] Use Spark Application to Read csv data from cloud GCS and get a DF created with the GCS data in the on prem, "
          "convert csv to json in the on prem DF and store the json into new cloud GCS location")
-   print("Hive to GCS to hive starts here")
+   print("[INFO] Hive to GCS to hive starts here")
    custstructtype1 = StructType([StructField("id", IntegerType(), False),
                               StructField("custfname", StringType(), False),
                               StructField("custlname", StringType(), True),
                               StructField("custage", ShortType(), True),
                               StructField("custprofession", StringType(), True)])
-   gcs_df = spark.read.csv("gs://inceptez-data-store/dataset/custs",mode='dropmalformed',schema=custstructtype1)
+   gcs_df = spark.read.csv("gs://iz-cloud-training-project-bucket/custs",mode='dropmalformed',schema=custstructtype1)
    gcs_df.show(10)
-   print("GCS Read Completed Successfully")
+   print("[INFO] GCS Read Completed Successfully")
    gcs_df.write.mode("overwrite").partitionBy("custage").saveAsTable("default.cust_info_gcs")
-   print("GCS to hive table load Completed Successfully")
+   print("[INFO] GCS to hive table load Completed Successfully")
 
-   print("Hive to GCS usecase starts here")
+   print("[INFO] Hive to GCS usecase starts here")
+   gcs_df=spark.read.table("default.cust_info_gcs")
+   curts = spark.createDataFrame([1], IntegerType()).withColumn("curts", current_timestamp()).select(date_format(col("curts"), "yyyyMMddHHmmSS")).first()[0]
+   print("[INFO] ",curts)
+   gcs_df.repartition(2).write.json("gs://iz-cloud-training-project-bucket/usecase4/cust_output_json_"+curts)
+   print("[INFO] gcs Write Completed Successfully")
+
+   print("[INFO] Hive to GCS usecase starts here")
    gcs_df=spark.read.table("default.cust_info_gcs")
    curts = spark.createDataFrame([1], IntegerType()).withColumn("curts", current_timestamp()).select(date_format(col("curts"), "yyyyMMddHHmmSS")).first()[0]
    print(curts)
-   gcs_df.repartition(2).write.json("gs://inceptez-data-store/dataset/cust_output_json_"+curts)
-   print("gcs Write Completed Successfully")
-
-   print("Hive to GCS usecase starts here")
-   gcs_df=spark.read.table("default.cust_info_gcs")
-   curts = spark.createDataFrame([1], IntegerType()).withColumn("curts", current_timestamp()).select(date_format(col("curts"), "yyyyMMddHHmmSS")).first()[0]
-   print(curts)
-   gcs_df.repartition(2).write.mode("overwrite").csv("gs://inceptez-data-store/dataset/cust_csv")
-   print("gcs Write Completed Successfully")
+   gcs_df.repartition(2).write.mode("overwrite").csv("gs://iz-cloud-training-project-bucket/usecase4/cust_csv")
+   print("[INFO] gcs Write Completed Successfully")
 
 main()
