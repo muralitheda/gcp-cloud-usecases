@@ -89,7 +89,7 @@ hadoop fs -cp -f gs://iz-cloud-training-project-bucket/txns hdfs:///user/hduser/
 
 **3. Create the below cust_etl.hql (load from the raw table to the curated external table) and place it in the gcs bucket.**
 
-vi cust_etl.hql
+vi cust_etl.hql  
 set mapreduce.input.fileinputformat.split.maxsize= 1000000;
 set mapreduce.job.reduces=4;
 set hive.exec.dynamic.partition.mode=nonstrict;
@@ -101,8 +101,7 @@ Insert into table ext_transactions partition (load_dt)  select txnno,txndate,cus
 
 hadoop fs -put cust_etl.hql /user/hduser/project/
 
-**4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):**
-
+**4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):**  
 vi gcp_hive_schedule.sh
 
 #!/bin/bash
@@ -141,12 +140,12 @@ echo "`date` gcloud hive ETL script is completed" &>> /tmp/gcp_hive_schedule.log
 bash gcp_hive_schedule.sh
 
 
-**6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)**
-hadoop fs -cp -f gs://source1-weblog-bucket-we45/dataset/txns /user/hduser/project/
-crontab -e
+**6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)**  
+hadoop fs -cp -f gs://source1-weblog-bucket-we45/dataset/txns /user/hduser/project/  
+crontab -e  
 */5 * * * * bash /home/hduser/gcp_hive_schedule.sh
 
-**To know the scheduled jobs list**
+**To know the scheduled jobs list**  
 Crontab -l
 
 ---
