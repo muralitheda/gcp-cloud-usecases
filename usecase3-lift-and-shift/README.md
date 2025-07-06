@@ -64,17 +64,17 @@
 
 ## 7. Execution Steps
 
-* Prerequisties:
+* **Prerequisties:**
 
 gcloud auth login
 
-* 1. Admin - Once for all - Create a long running dataproc cluster
+* **1. Admin - Once for all - Create a long running dataproc cluster**
 
 gcloud dataproc clusters create cluster-dataproc-2 --enable-component-gateway --region us-central1 --no-address --master-machine-type e2-standard-2 --master-boot-disk-type pd-balanced --master-boot-disk-size 100 --num-workers 3 --worker-machine-type e2-standard-2 --worker-boot-disk-type pd-balanced --worker-boot-disk-size 100 --shielded-secure-boot --shielded-vtpm --image-version 2.1-rocky8 --properties hdfs:dfs.replication=3,hdfs:dfs.blocksize=268435456,spark:spark.dataproc.enhanced.optimizer.enabled=true,spark:spark.dataproc.enhanced.execution.enabled=true --optional-components JUPYTER,ZEPPELIN --max-idle 7200s --project iz-cloud-training-project --bucket iz-dataproc-uscentral1-bucket-1
 
 gcloud dataproc clusters describe cluster-dataproc-2 --region=us-central1
 
-* 2. Admin - Once for all - Open the Dataproc Master node ssh (edge node of the cloud cluster) and execute the below steps:
+* **2. Admin - Once for all - Open the Dataproc Master node ssh (edge node of the cloud cluster) and execute the below steps:**
 
 gcloud compute ssh --zone "us-central1-a" "cluster-dataproc-2-m" --project "iz-cloud-training-project"
  
@@ -83,11 +83,11 @@ hadoop fs -mkdir -p /user/hduser/project
 hadoop fs -chmod -R 777 /user/hduser/sudo 
 exit
 
-Get the data and code ready in the Dataproc cluster environment to use later (2. Online Transfer)
+**Get the data and code ready in the Dataproc cluster environment to use later (2. Online Transfer)**
 
 hadoop fs -cp -f gs://iz-cloud-training-project-bucket/txns hdfs:///user/hduser/project/ #data will be loaded by source providers in a frequent interval
 
-* 3. Create the below cust_etl.hql (load from the raw table to the curated external table) and place it in the gcs bucket.
+* **3. Create the below cust_etl.hql (load from the raw table to the curated external table) and place it in the gcs bucket.**
 
 vi cust_etl.hql
 set mapreduce.input.fileinputformat.split.maxsize= 1000000;
@@ -101,7 +101,7 @@ Insert into table ext_transactions partition (load_dt)  select txnno,txndate,cus
 
 hadoop fs -put cust_etl.hql /user/hduser/project/
 
-* 4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):
+* **4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):**
 
 vi gcp_hive_schedule.sh
 
@@ -137,16 +137,16 @@ echo "`date` hive table creation part of the EL is completed successfully" &>> /
 fi
 echo "`date` gcloud hive ETL script is completed" &>> /tmp/gcp_hive_schedule.log
 
-* 5. To run the script manually in ONPrem (Testing)
+* **5. To run the script manually in ONPrem (Testing)**
 bash gcp_hive_schedule.sh
 
 
-* 6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)
+* **6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)**
 hadoop fs -cp -f gs://source1-weblog-bucket-we45/dataset/txns /user/hduser/project/
 crontab -e
 */5 * * * * bash /home/hduser/gcp_hive_schedule.sh
 
-#To know the scheduled jobs list
+**To know the scheduled jobs list**
 Crontab -l
 
 ---
