@@ -137,7 +137,7 @@ echo "`date` hive table creation part of the EL is completed successfully" &>> /
 fi
 echo "`date` gcloud hive ETL script is completed" &>> /tmp/gcp_hive_schedule.log
 
-**5. To run the script manually in ONPrem (Testing)**
+**5. To run the script manually in ONPrem (Testing)**  
 bash gcp_hive_schedule.sh
 
 
