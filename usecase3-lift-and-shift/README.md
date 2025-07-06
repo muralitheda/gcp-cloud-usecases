@@ -17,7 +17,7 @@
 ## 2. Data Migration: "Lift & Shift"
 
 * **On-Premises HDFS**
-    * ===> (hadoop fs -cp gs:// ) Google Cloud Storage (GCS)
+    * (hadoop fs -cp gs:// ) ===> Google Cloud Storage (GCS)
 
 ---
 
@@ -45,7 +45,7 @@
 
 ## 5. Hybrid Cloud Use Case Steps (Example: Use Case 3)
 
-1.  **Create Dataproc Cluster**
+* 1. **Create Dataproc Cluster**
     * 2. **Connect (SSH / gcloud cli)**
         * 3. **Develop HQL Scripts (for Hive)**
             * 4. **Run gcloud hive job**
