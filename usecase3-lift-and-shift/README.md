@@ -45,12 +45,12 @@
 
 ## 5. Hybrid Cloud Use Case Steps (Example: Use Case 3)
 
-* 1. **Create Dataproc Cluster**
-    * 2. **Connect (SSH / gcloud cli)**
-        * 3. **Develop HQL Scripts (for Hive)**
-            * 4. **Run gcloud hive job**
-                * 5. **Schedule Job (via Cron/Oozie on Edge Node)**
-                    * 6. **Verify Data in Hive Tables (on Dataproc)**
+* **Create Dataproc Cluster**
+    * **Connect (SSH / gcloud cli)**
+        * **Develop HQL Scripts (for Hive)**
+            * **Run gcloud hive job**
+                * **Schedule Job (via Cron/Oozie on Edge Node)**
+                    * **Verify Data in Hive Tables (on Dataproc)**
 
 ---
 
