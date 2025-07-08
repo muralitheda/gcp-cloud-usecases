@@ -92,37 +92,37 @@ hadoop fs -put cust_etl.hql /user/hduser/project/
 **4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):**  
 vi gcp_hive_schedule.sh
 
-#!/bin/bash
-#source /home/hduser/.bashrc
-echo "`date` gcloud hive ETL script is started"
-echo "`date` gcloud hive ETL script is started" &>> /tmp/gcp_hive_schedule.log
-#hive -e "create table if not exists transactions (txnno INT, txndate STRING, custno INT, amount DOUBLE,category string, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' stored as textfile"
-gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "create table if not exists transactions (txnno INT, txndate STRING, custno INT, amount DOUBLE,category string, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' stored as textfile" &> /tmp/gcp_hive_schedule.log
-if [ $? -ne 0 ]
-then
-echo "`date` error occured in the hive table creation part of the EL" &>> /tmp/gcp_hive_schedule.log
-else
-echo "`date` hive table creation part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log
-fi 
-#in onprem I was calling hive queries like this “hive –e "load data inpath '/user/hduser/project/txns' overwrite into table transactions" “
-gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "load data inpath '/user/hduser/project/txns' overwrite into table transactions" &> /tmp/gcp_hive_schedule.log
-if [ $? -ne 0 ]
-then
-echo "`date` error occured in the hive table load part of the EL" &>> /tmp/gcp_hive_schedule.log
-else
-echo "`date` hive table load part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log
-fi 
-loaddt=$(date '+%Y-%m-%d')
-#hive –f hdfs:///user/hduser/project/cust_etl.hql in our onprem
+#!/bin/bash  
+#source /home/hduser/.bashrc  
+echo "`date` gcloud hive ETL script is started"  
+echo "`date` gcloud hive ETL script is started" &>> /tmp/gcp_hive_schedule.log  
+#hive -e "create table if not exists transactions (txnno INT, txndate STRING, custno INT, amount DOUBLE,category string, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' stored as textfile"  
+gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "create table if not exists transactions (txnno INT, txndate STRING, custno INT, amount DOUBLE,category string, product STRING, city STRING, state STRING, spendby STRING) row format delimited fields terminated by ',' stored as textfile" &> /tmp/gcp_hive_schedule.log  
+if [ $? -ne 0 ]  
+then  
+echo "`date` error occured in the hive table creation part of the EL" &>> /tmp/gcp_hive_schedule.log  
+else  
+echo "`date` hive table creation part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log  
+fi   
+#in onprem I was calling hive queries like this “hive –e "load data inpath '/user/hduser/project/txns' overwrite into table transactions" “  
+gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "load data inpath '/user/hduser/project/txns' overwrite into table transactions" &> /tmp/gcp_hive_schedule.log  
+if [ $? -ne 0 ]  
+then  
+echo "`date` error occured in the hive table load part of the EL" &>> /tmp/gcp_hive_schedule.log  
+else  
+echo "`date` hive table load part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log  
+fi   
+loaddt=$(date '+%Y-%m-%d')  
+#hive –f hdfs:///user/hduser/project/cust_etl.hql in our onprem  
 gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 --file=hdfs:///user/hduser/project/cust_etl.hql --continue-on-failure \
---params=load_dt=$loaddt &>> /tmp/gcp_hive_schedule.log
-if [ $? -ne 0 ]
-then
-echo "`date` error occured in the hive table creation part of the EL" &>> /tmp/gcp_hive_schedule.log
-else
-echo "`date` hive table creation part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log
-fi
-echo "`date` gcloud hive ETL script is completed" &>> /tmp/gcp_hive_schedule.log
+--params=load_dt=$loaddt &>> /tmp/gcp_hive_schedule.log  
+if [ $? -ne 0 ]  
+then  
+echo "`date` error occured in the hive table creation part of the EL" &>> /tmp/gcp_hive_schedule.log  
+else  
+echo "`date` hive table creation part of the EL is completed successfully" &>> /tmp/gcp_hive_schedule.log  
+fi  
+echo "`date` gcloud hive ETL script is completed" &>> /tmp/gcp_hive_schedule.log  
 
 **5. To run the script manually in ONPrem (Testing)**  
 bash gcp_hive_schedule.sh
