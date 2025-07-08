@@ -12,9 +12,11 @@
     * Hadoop User Environment (HUE)
 
 
+
 ## 2. Data Migration: "Lift & Shift"
 
 * **On-Premises HDFS ===> Google Cloud Storage (GCS)**
+
 
 
 ## 3. GCP Dataproc Processing (Target)
@@ -28,6 +30,7 @@
     * Hadoop User Environment (HUE)
 
 
+
 ## 4. Hybrid Cloud Use Case Steps (Example: Use Case 3)
 
 * **Create Dataproc Cluster**
@@ -38,11 +41,13 @@
                     * **Verify Data in Hive Tables (on Dataproc)**
 
 
+
 ## 5. Key Benefits / Applications
 
 * Predictive Analytics
 * Fraud & Abuse Prevention
 * Improved Diagnostics
+
 
 
 ## 6. Execution Steps
