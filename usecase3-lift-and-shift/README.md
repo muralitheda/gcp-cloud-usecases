@@ -16,8 +16,7 @@
 
 ## 2. Data Migration: "Lift & Shift"
 
-* **On-Premises HDFS**
-    * (hadoop fs -cp gs:// ) ===> Google Cloud Storage (GCS)
+* **On-Premises HDFS ===> Google Cloud Storage (GCS)**
 
 ---
 
@@ -33,17 +32,7 @@
 
 ---
 
-## 4. On-Premises Edge Node: Orchestration
-
-* **[On-Premises Edge Node]**
-    * Cron/Scheduler
-        * Shell Script: gcp_hive_schedule.sh
-            * Triggers GCLOUD Cron Jobs
-                * [GCP Dataproc Cluster] (Executes Hive/Spark Jobs)
-
----
-
-## 5. Hybrid Cloud Use Case Steps (Example: Use Case 3)
+## 4. Hybrid Cloud Use Case Steps (Example: Use Case 3)
 
 * **Create Dataproc Cluster**
     * **Connect (SSH / gcloud cli)**
@@ -54,7 +43,7 @@
 
 ---
 
-## 6. Key Benefits / Applications
+## 5. Key Benefits / Applications
 
 * Predictive Analytics
 * Fraud & Abuse Prevention
@@ -62,7 +51,7 @@
 
 ---
 
-## 7. Execution Steps
+## 6. Execution Steps
 
 **Prerequisties:**
 
