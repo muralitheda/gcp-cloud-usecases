@@ -66,9 +66,9 @@ gcloud dataproc clusters describe cluster-dataproc-2 --region=us-central1
 
 gcloud compute ssh --zone "us-central1-a" "cluster-dataproc-2-m" --project "iz-cloud-training-project"
  
-sudo su hdfs
-hadoop fs -mkdir -p /user/hduser/project
-hadoop fs -chmod -R 777 /user/hduser/sudo 
+sudo su hdfs  
+hadoop fs -mkdir -p /user/hduser/project  
+hadoop fs -chmod -R 777 /user/hduser/sudo   
 exit
 
 **Get the data and code ready in the Dataproc cluster environment to use later (2. Online Transfer)**
