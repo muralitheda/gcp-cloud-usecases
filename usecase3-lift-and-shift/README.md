@@ -139,8 +139,7 @@ hive> show tables;
 hive> select count(1) from transactions;  
 hive> select count(1) from ext_transactions;  
 
-**6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)**  
-hadoop fs -cp -f gs://source1-weblog-bucket-we45/dataset/txns /user/hduser/project/  
+**6. Schedule the above script in the Onprem edge node using the cron tab or (you can ask your Organization scheduling & Monitoring team)**
 crontab -e  
 */5 * * * * bash /home/hduser/gcp_hive_schedule.sh
 
