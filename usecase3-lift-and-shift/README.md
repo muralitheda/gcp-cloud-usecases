@@ -1,6 +1,5 @@
 # Hybrid Cloud Data Migration - Key Points
 
----
 
 ## 1. On-Premises Data Flow (Source)
 
@@ -12,13 +11,11 @@
 * **[Hive: Curated Data]**
     * Hadoop User Environment (HUE)
 
----
 
 ## 2. Data Migration: "Lift & Shift"
 
 * **On-Premises HDFS ===> Google Cloud Storage (GCS)**
 
----
 
 ## 3. GCP Dataproc Processing (Target)
 
@@ -30,7 +27,6 @@
 * **[Hive: Curated Data]**
     * Hadoop User Environment (HUE)
 
----
 
 ## 4. Hybrid Cloud Use Case Steps (Example: Use Case 3)
 
@@ -41,7 +37,6 @@
                 * **Schedule Job (via Cron/Oozie on Edge Node)**
                     * **Verify Data in Hive Tables (on Dataproc)**
 
----
 
 ## 5. Key Benefits / Applications
 
@@ -49,7 +44,6 @@
 * Fraud & Abuse Prevention
 * Improved Diagnostics
 
----
 
 ## 6. Execution Steps
 
