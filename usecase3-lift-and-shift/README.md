@@ -144,6 +144,6 @@ crontab -e
 */5 * * * * bash /home/hduser/gcp_hive_schedule.sh
 
 **To know the scheduled jobs list**  
-Crontab -l
+crontab -l
 
 ---
