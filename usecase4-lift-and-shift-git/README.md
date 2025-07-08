@@ -23,23 +23,8 @@ This use case provides excellent material for answering interview questions rela
 * **Leveraging Git for Version Control:** Highlights the importance and application of Git in a cloud deployment pipeline.
 * **Scheduling Jobs with Google Cloud Provided Cron Scheduler:** Focuses on the use of Google Cloud's scheduling capabilities for automating tasks.
 
-## GCP Cloud Architecture
 
-The core of this solution resides within the Google Cloud Platform, leveraging various services to create a robust data processing and analysis environment.
-
-**Core Components:**
-
-* **Centralized Metastore (Google Cloud Storage):** Acts as a centralized metadata repository, likely for Hive tables and other data assets.
-* **Dataproc LR Cluster:** A long-running (LR) Dataproc cluster serves as the primary processing engine.
-    * **Spark SQL:** Used for data manipulation and querying.
-    * **Hive HDFS:** Provides a distributed file system and data warehousing capabilities within the cluster.
-    * **Apache Zeppelin:** Likely used for interactive data analytics and collaboration.
-    * **YARN:** Manages cluster resources.
-    * **Spark Submit SQL:** Indicates the method for submitting Spark jobs.
-* **BigQuery:** A fully managed, serverless data warehouse for analytics.
-* **Notebook for Analyzing/Developing BigData Ecosystems:** Suggests the use of managed notebooks for interactive data exploration and development.
-
-**Workflow:**
+## Workflow
 
 1.  **Manual Code Cloning/Pull (via GitHub):**
     * **GitHub (Version Control & Code Repo):** Developers commit their code here.
@@ -57,15 +42,8 @@ The core of this solution resides within the Google Cloud Platform, leveraging v
 
 The solution enables advanced analytics and real-time insights, exemplified by its application in health tracking:
 
-* **Health Tracking**
-* **Prevent Fraud & Abuse**
-* **Predictive Analytics**
-* **Customized Care**
-* **Preventing Human Errors**
-* **Most Effective Diagnostic**
-* **Computational Phenotyping**
-* **Patient Similarity**
-* **Telemedicine**
-* **Medical Imaging**
+* Predictive Analytics
+* Fraud & Abuse Prevention
+* Improved Diagnostics
 
----
+## Execution Steps
