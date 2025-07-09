@@ -173,6 +173,7 @@ gcloud dataproc jobs submit pyspark --cluster=singlenode-cluster-dataproc-1 --re
 6. **Check for the data load status**  
 ```bash
 bq query --use_legacy_sql=false "select * from rawds.customer_raw limit 10"
+bq query --use_legacy_sql=false "select * from curatedds.customer_curated limit 10"
 ```
 
 
