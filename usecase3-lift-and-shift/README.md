@@ -82,6 +82,8 @@ hadoop fs -cp -f gs://iz-cloud-training-project-bucket/txns hdfs:///user/hduser/
 
 ```bash
 vi cust_etl.hql  
+```
+```bash
 set mapreduce.input.fileinputformat.split.maxsize= 1000000;  
 set mapreduce.job.reduces=4;  
 set hive.exec.dynamic.partition.mode=nonstrict;  
@@ -101,6 +103,8 @@ hadoop fs -put cust_etl.hql /user/hduser/project/
 **4. Create & Run the below script or schedule in cron to run once in a day (In our ONPREM Centos VM):**  
 ```bash
 vi gcp_hive_schedule.sh
+```
+```bash
 #!/bin/bash  
 #source /home/hduser/.bashrc  
 echo "`date` gcloud hive ETL script is started"  
