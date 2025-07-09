@@ -55,10 +55,20 @@ gcloud auth login
 gcloud dataproc clusters create singlenode-cluster-dataproc-1 --region us-central1 --zone us-central1-a --enable-component-gateway --single-node --master-machine-type e2-standard-2 --master-boot-disk-size 100 --image-version 2.1-debian11 --project iz-cloud-training-project --max-idle 7200s
 ```
 ```bash
+#Check cluster running status
 gcloud dataproc clusters describe singlenode-cluster-dataproc-1 --region=us-central1
 ```
 ```bash
+#Connect to cluster master/edge node
 gcloud compute ssh --zone "us-central1-a" "singlenode-cluster-dataproc-1-m" --project "iz-cloud-training-project"
+```
+
+2. **Create BQ datasets (Equivalent to Database in hive) – Cloud cli/Edgenode(linux/windows)/Console**
+
+```bash
+#Creating BigQuery Dataset
+bq mk rawds
+bq mk curatedds
 ```
 
 
