@@ -165,3 +165,10 @@ def main():
 
 main()
 ```
+
+**7. Schedule the above script in the Dataproc Cloud (Master) edge node using the cron tab.**
+```bash
+crontab -e
+*/5 * * * * bash /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh 
+```
+
