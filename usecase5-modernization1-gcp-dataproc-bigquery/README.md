@@ -195,6 +195,8 @@ echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedul
 ```
 
 ```bash
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/trigger_pyspark.sh /home/hduser/
+
 chmod 777 /home/hduser/trigger_pyspark.sh
 
 crontab -e
