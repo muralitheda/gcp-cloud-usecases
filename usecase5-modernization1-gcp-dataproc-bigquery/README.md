@@ -165,4 +165,15 @@ def main():
 main()
 ```
 
+5. **Before run the gcloud pyspark job, ensure the code, dataset is copied, BQ datasets are created.**  
+```bash
+gcloud dataproc jobs submit pyspark --cluster=singlenode-cluster-dataproc-1 --region=us-central1 gs://iz-cloud-training-project-bucket/codebase/Usecase5_gcsToBQRawToBQCurated.py
+```
+
+6. **Check for the data load status**  
+```bash
+bq query --use_legacy_sql=false "select * from rawds.customer_raw limit 10"
+```
+
+
 
