@@ -105,8 +105,7 @@ echo "`date` Pyspark job is completed successfully" > /tmp/gcp_pyspark_schedule.
 fi  
 echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedule.log  
 
-**vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py  
-vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py
+**vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py**    
 
 #prerequisites  
 #Download the jar from https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-latest-hadoop2.jar  
