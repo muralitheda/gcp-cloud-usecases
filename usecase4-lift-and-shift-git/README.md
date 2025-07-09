@@ -47,3 +47,47 @@ The solution enables advanced analytics and real-time insights, exemplified by i
 * Improved Diagnostics
 
 ## Execution Steps
+
+**Prerequisties:**
+
+gcloud auth login
+
+**1. Admin - Once for all - Create a long running dataproc cluster**
+
+gcloud dataproc clusters create cluster-dataproc-2 --enable-component-gateway --bucket iz-dataproc-uscentral1-bucket-1 --region us-central1 --zone us-central1-a --master-machine-type e2-standard-2 --master-boot-disk-size 100 --num-workers 3 --worker-machine-type e2-standard-2 --worker-boot-disk-size 100 --image-version 2.1-rocky8 --properties hdfs:dfs.blocksize=268435456 --max-idle 7200s --project iz-cloud-training-project 
+
+gcloud dataproc clusters describe cluster-dataproc-2 --region=us-central1
+
+
+**2. Admin - Once for all - Open the Dataproc Master node ssh (edge node of the cloud cluster) and execute the below steps:**
+
+gcloud compute ssh --zone "us-central1-a" "cluster-dataproc-2-m" --project "iz-cloud-training-project"  
+
+
+**3. Develop the pyspark code & pushed the code (Usecase4_GcpGcsReadWritehive_cloud.py) to GIT**  
+
+https://github.com/muralitheda/gcp-cloud-usecases/blob/master/usecase4-lift-and-shift-git/Usecase4_GcpGcsReadWritehive_cloud.py  
+
+**4.  Login to the dataproc master node using public dns or master node ssh or using vm edge node terminal and install the Git (Admin will do once for all)**  
+
+#sudo yum install git  
+git config --global user.name "muralitheda"  
+git config --global user.email "murali.balasubramaniam@outlook.com"  
+git config --list  
+git init  
+cd .git/  
+
+**5. Login to master node & Clone the git repo to download the code (Production Deployment Team/CICD Tool)**  
+
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+
+
+
+
+
+
+
+
+
+

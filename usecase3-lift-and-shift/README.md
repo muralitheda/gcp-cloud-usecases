@@ -58,7 +58,7 @@ gcloud auth login
 
 **1. Admin - Once for all - Create a long running dataproc cluster**
 
-gcloud dataproc clusters create cluster-dataproc-2 --enable-component-gateway --region us-central1 --no-address --master-machine-type e2-standard-2 --master-boot-disk-type pd-balanced --master-boot-disk-size 100 --num-workers 3 --worker-machine-type e2-standard-2 --worker-boot-disk-type pd-balanced --worker-boot-disk-size 100 --shielded-secure-boot --shielded-vtpm --image-version 2.1-rocky8 --properties hdfs:dfs.replication=3,hdfs:dfs.blocksize=268435456,spark:spark.dataproc.enhanced.optimizer.enabled=true,spark:spark.dataproc.enhanced.execution.enabled=true --optional-components JUPYTER,ZEPPELIN --max-idle 7200s --project iz-cloud-training-project --bucket iz-dataproc-uscentral1-bucket-1
+gcloud dataproc clusters create cluster-dataproc-2 --enable-component-gateway --bucket iz-dataproc-uscentral1-bucket-1 --region us-central1 --zone us-central1-a --master-machine-type e2-standard-2 --master-boot-disk-size 100 --num-workers 3 --worker-machine-type e2-standard-2 --worker-boot-disk-size 100 --image-version 2.1-rocky8 --properties hdfs:dfs.blocksize=268435456 --max-idle 7200s --project iz-cloud-training-project 
 
 gcloud dataproc clusters describe cluster-dataproc-2 --region=us-central1
 
