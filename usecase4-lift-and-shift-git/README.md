@@ -85,7 +85,8 @@ cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/Us
 cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/gcp_pyspark_yarn_client_schedule.sh ~/project  
 chmod 777 ~/project/*  
 
-**Ensure to copy the custs data from the gcp bucket/other location to the edge node**
+**Ensure to copy the custs data from the gcp bucket/other location to the edge node**  
+
 mkdir ~/dataset  
 hadoop fs -cp -f gs://iz-cloud-training-project-bucket/custs ~/dataset/  
 
