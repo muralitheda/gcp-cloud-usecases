@@ -176,5 +176,28 @@ bq query --use_legacy_sql=false "select * from rawds.customer_raw limit 10"
 bq query --use_legacy_sql=false "select * from curatedds.customer_curated limit 10"
 ```
 
+7. **Schedule the above spark job submission to run in a scheduled interval (cron scheduler)**
+```bash
+vi trigger_pyspark.sh
+```
 
+```bash
+#!/bin/bash
+gcloud dataproc jobs submit pyspark --cluster=singlenode-cluster-dataproc-1 --region=us-central1 gs://iz-cloud-training-project-bucket/codebase/Usecase5_gcsToBQRawToBQCurated.py
+if [ $? -ne 0 ]
+then
+echo "`date` error occured in the Pyspark job" > /tmp/gcp_pyspark_schedule.log
+else
+echo "`date` Pyspark job is completed successfully" > /tmp/gcp_pyspark_schedule.log
+fi
+echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedule.log
+```
+
+```bash
+chmod 777 /home/hduser/trigger_pyspark.sh
+
+crontab -e
+*/2 * * * * bash /home/hduser/trigger_pyspark.sh
+
+```
 
