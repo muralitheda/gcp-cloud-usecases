@@ -86,6 +86,7 @@ cd .git/
 git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
 
 gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase5-modernization1-gcp-dataproc-bigquery/Usecase5_gcsToBQRawToBQCurated.py gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase5-modernization1-gcp-dataproc-bigquery/trigger_pyspark.sh gs://iz-cloud-training-project-bucket/codebase/
 
 #dataset verification : custs
 gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
