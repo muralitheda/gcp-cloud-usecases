@@ -177,3 +177,19 @@ crontab -e
 gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "SELECT * FROM cust_info_gcs where custage>30 limit 100"
 ```
 
+**Tip #1. Stop the cluster** 
+```bash
+gcloud dataproc clusters stop cluster-dataproc-2 --region=us-central1
+```
+
+**Tip #2. Start the cluster** 
+```bash
+gcloud dataproc clusters start cluster-dataproc-2 --region=us-central1
+```
+
+**Tip #3. Delete the cluster** 
+```bash
+gcloud dataproc clusters delete cluster-dataproc-2 --region=us-central1
+```
+
+
