@@ -50,19 +50,23 @@ The solution enables advanced analytics and real-time insights, exemplified by i
 
 **Prerequisties:**
 
+```bash
 gcloud auth login
+```
 
 **1. Admin - Once for all - Create a long running dataproc cluster**
 
+```bash
 gcloud dataproc clusters create cluster-dataproc-2 --enable-component-gateway --bucket iz-dataproc-uscentral1-bucket-1 --region us-central1 --zone us-central1-a --master-machine-type e2-standard-2 --master-boot-disk-size 100 --num-workers 3 --worker-machine-type e2-standard-2 --worker-boot-disk-size 100 --image-version 2.1-rocky8 --properties hdfs:dfs.blocksize=268435456 --max-idle 7200s --project iz-cloud-training-project 
 
 gcloud dataproc clusters describe cluster-dataproc-2 --region=us-central1
-
+```
 
 **2. Admin - Once for all - Open the Dataproc Master node ssh (edge node of the cloud cluster) and execute the below steps:**
 
+```bash
 gcloud compute ssh --zone "us-central1-a" "cluster-dataproc-2-m" --project "iz-cloud-training-project"  
-
+```
 
 **3. Develop the pyspark code & pushed the code (Usecase4_GcpGcsReadWritehive_cloud.py) to GIT**  
 
@@ -70,31 +74,36 @@ https://github.com/muralitheda/gcp-cloud-usecases/blob/master/usecase4-lift-and-
 
 **4.  Login to the dataproc master node using public dns or master node ssh or using vm edge node terminal and install the Git (Admin will do once for all)**  
 
+```bash
 #sudo yum install git  
 git config --global user.name "muralitheda"  
 git config --global user.email "yourmailaddress@dot.com"  
 git config --list  
 git init  
 cd .git/  
-
+```
 **5. Login to master node & Clone the git repo to download the code (Production Deployment Team/CICD Tool)**  
 
+```bash
 git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
 mkdir -p ~/project  
 cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/Usecase4_GcpGcsReadWritehive_cloud.py ~/project  
 cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/gcp_pyspark_yarn_client_schedule.sh ~/project  
 chmod 777 ~/project/*  
-
+```
 **Ensure to copy the custs data from the gcp bucket/other location to the edge node**  
 
+```bash
 mkdir ~/dataset  
 gsutil cp gs://iz-cloud-training-project-bucket/custs ~/dataset/    
-
+```
 **6. Create a shell script and submit the pyspark job using the gcloud command**
-
+```bash
 bash /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh  
+```
 
 **vi /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh**
+
 ```bash
 #!/bin/bash
 gcloud dataproc jobs submit pyspark --cluster=cluster-dataproc-2 --region=us-central1 --properties="spark.driver.memory=2g","spark.executor.memory=2g","spark.executor.instances=4","spark.executor.cores=2","spark.submit.deployMode=client","spark.sql.shuffle.partitions=10","spark.shuffle.spill.compress=true" /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/Usecase4_GcpGcsReadWritehive_cloud.py  
