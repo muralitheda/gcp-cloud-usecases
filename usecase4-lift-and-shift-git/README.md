@@ -88,7 +88,7 @@ chmod 777 ~/project/*
 **Ensure to copy the custs data from the gcp bucket/other location to the edge node**  
 
 mkdir ~/dataset  
-hadoop fs -cp -f gs://iz-cloud-training-project-bucket/custs ~/dataset/  
+gsutil cp gs://iz-cloud-training-project-bucket/custs ~/dataset/    
 
 
 
