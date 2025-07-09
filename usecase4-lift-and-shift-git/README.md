@@ -102,7 +102,9 @@ gsutil cp gs://iz-cloud-training-project-bucket/custs ~/dataset/
 bash /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh  
 ```
 
-**vi /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh**
+```bash
+vi /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh  
+```
 
 ```bash
 #!/bin/bash
@@ -116,7 +118,9 @@ fi
 echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedule.log  
 ```
 
-**vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py**    
+```bash
+vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py  
+```
 
 ```python
 from pyspark.sql.functions import *
