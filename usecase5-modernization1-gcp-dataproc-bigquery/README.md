@@ -204,3 +204,7 @@ crontab -e
 
 ```
 
+**Tip # Delete the cluster** 
+```bash
+gcloud dataproc clusters delete singlenode-cluster-dataproc-1 --region=us-central1
+```
