@@ -82,7 +82,7 @@ cd .git/
 git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
 mkdir -p ~/project  
 cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/Usecase4_GcpGcsReadWritehive_cloud.py ~/project  
-cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/gcp_pyspark_schedule.sh ~/project  
+cp /home/muralisalaipudur/.git/gcp-cloud-usecases/usecase4-lift-and-shift-git/gcp_pyspark_yarn_client_schedule.sh ~/project  
 chmod 777 ~/project/*  
 
 
