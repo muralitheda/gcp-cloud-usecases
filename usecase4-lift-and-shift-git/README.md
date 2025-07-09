@@ -109,13 +109,13 @@ echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedul
 vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py
 
 #prerequisites
-# Download the jar from https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-latest-hadoop2.jar
+#Download the jar from https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-latest-hadoop2.jar
 #spark-submit --jars /home/hduser/install/gcp/gcs-connector-latest-hadoop2.jar GcpGcsReadWritehivewe39_cloud.py
 from pyspark.sql.functions import *
 from pyspark.sql.types import *  
 def main():  
    from pyspark.sql import SparkSession  
-   # define spark configuration object  
+   #define spark configuration object  
    spark = SparkSession.builder\  
       .appName("GCP GCS Hive Read/Write") \  
       .enableHiveSupport()\  
