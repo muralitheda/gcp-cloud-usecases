@@ -43,4 +43,25 @@ Building upon previous use cases, this scenario fundamentally focuses on achievi
 
 Follow these steps to set up and run the Spark ETL process with BigQuery on GCP:
 
-1. **Step1**
+**Prerequisties:**
+
+```bash
+gcloud auth login
+```
+
+1. **Once for all - Create the Long running cluster (logging into the edge node of the onprem cluster):**
+
+```bash
+gcloud dataproc clusters create singlenode-cluster-dataproc-1 --region us-central1 --zone us-central1-a --enable-component-gateway --single-node --master-machine-type e2-standard-2 --master-boot-disk-size 100 --image-version 2.1-debian11 --project iz-cloud-training-project --max-idle 7200s
+```
+```bash
+gcloud dataproc clusters describe singlenode-cluster-dataproc-1 --region=us-central1
+```
+```bash
+gcloud compute ssh --zone "us-central1-a" "singlenode-cluster-dataproc-1-m" --project "iz-cloud-training-project"
+```
+
+
+
+
+
