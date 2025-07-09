@@ -69,9 +69,8 @@ gcloud compute ssh --zone "us-central1-a" "singlenode-cluster-dataproc-1-m" --pr
 #Creating BigQuery Dataset
 bq mk rawds
 bq mk curatedds
-```
-**#Note: Either in the BQ Console/cli use the below query to create a raw (native) table**
-```bash
+
+#Note: Either in the BQ Console/cli use the below query to create a raw (native) table
 bq query --use_legacy_sql=false "create or replace table rawds.customer_raw(custno INT64, firstname STRING,lastname STRING,age INT64,profession STRING);"
 #spark will create this table if we don’t create it…
 ```
