@@ -75,6 +75,19 @@ bq query --use_legacy_sql=false "create or replace table rawds.customer_raw(cust
 #spark will create this table if we don’t create it…
 ```
 
+3. **Ensure to copy the code and custs data**
+```bash
+#sudo yum install git  
+git config --global user.name "muralitheda"  
+git config --global user.email "yourmailaddress@dot.com"  
+git config --list  
+git init  
+cd .git/  
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp ~/gcplearn/Usecase5_gcsToBQRawToBQCurated.py gs://inceptez-usecases-bucket/code/
+
+```
 
 
 
