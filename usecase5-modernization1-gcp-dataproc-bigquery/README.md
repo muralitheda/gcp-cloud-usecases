@@ -8,7 +8,6 @@ This README outlines a cloud modernization use case leveraging Google Cloud Plat
 
 This use case demonstrates a cloud modernization strategy where **Spark code runs on a Dataproc cluster for ETL processes**, and the **managed BigQuery service is utilized for analytics**. This approach is preferred over traditional on-premises Hive for analytics due to BigQuery's advanced features, scalability, and flexibility, making it an ideal choice for data analysts, data scientists, and data engineers. This strategy emphasizes a "cloud-agnostic" mindset by focusing on managed services.
 
----
 
 ## 2. Architecture Overview
 
@@ -26,7 +25,6 @@ The solution involves:
 
 The flow involves data moving from GCS to Dataproc for ETL, then into BigQuery (Raw and Curated layers), and finally consumed by Data Studio.
 
----
 
 ## 3. Key Learnings from this Use Case
 
@@ -40,7 +38,6 @@ Building upon previous use cases, this scenario fundamentally focuses on achievi
 
 * **Cluster Choice:** Highlighting the suitability of Long-Running (LR) or Ephemeral (EPH) Dataproc clusters based on specific ETL workload patterns.
 
----
 
 ## 4. Steps to Execute the Use Case
 
