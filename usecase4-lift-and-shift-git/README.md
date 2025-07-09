@@ -172,3 +172,8 @@ crontab -e
 */5 * * * * bash /home/muralisalaipudur/project/gcp_pyspark_yarn_client_schedule.sh 
 ```
 
+**8. Validate the data in cloud Hive environment**  
+```bash
+gcloud dataproc jobs submit hive --cluster=cluster-dataproc-2 --region us-central1 -e "SELECT * FROM cust_info_gcs where custage>30 limit 100"
+```
+
