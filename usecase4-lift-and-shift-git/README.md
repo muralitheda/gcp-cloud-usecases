@@ -107,6 +107,7 @@ echo "`date` gcloud pyspark ETL script is completed" >> /tmp/gcp_pyspark_schedul
 
 **vi /home/muralisalaipudur/project/Usecase4_GcpGcsReadWritehive_cloud.py**    
 
+```python
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
