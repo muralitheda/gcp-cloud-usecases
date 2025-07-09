@@ -72,7 +72,7 @@ https://github.com/muralitheda/gcp-cloud-usecases/blob/master/usecase4-lift-and-
 
 #sudo yum install git  
 git config --global user.name "muralitheda"  
-git config --global user.email "murali.balasubramaniam@outlook.com"  
+git config --global user.email "yourmailaddress@dot.com"  
 git config --list  
 git init  
 cd .git/  
