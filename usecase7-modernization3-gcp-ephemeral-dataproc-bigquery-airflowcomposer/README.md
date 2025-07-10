@@ -42,3 +42,143 @@ Post-processing, the data is loaded into **Google BigQuery**, which serves as ou
 The entire workflow, including the intelligent provisioning and de-provisioning of the ephemeral Dataproc clusters, is meticulously orchestrated using **Google Cloud Composer (Apache Airflow)**. ***Our Airflow DAGs are responsible for managing the entire lifecycle – from initiating the ephemeral cluster, submitting the Spark jobs, monitoring their execution, to finally tearing down the cluster.*** This automation ensures both efficiency and significant cost reduction.
 
 Finally, the curated data in BigQuery is utilized by tools like **Google Data Studio** for powerful data visualization and reporting, enabling our stakeholders to derive insights efficiently and cost-effectively.
+
+## 6. Steps to Execute the Use Case:
+
+1. **Make sure Cloud Composer is created (Usecase6) and running**
+
+2. **Delete the tables data in the BigQuery Datasets**
+
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+bq query --use_legacy_sql=false "delete from rawds.customer_raw where  1=1;"
+bq query --use_legacy_sql=false "delete from curatedds.customer_curated where 1=1;"
+
+#If the BigQuery datasets are not available then create it by issuing the below commands
+bq mk rawds
+bq mk curatedds
+```
+
+3. **Ensure to copy the code and custs data**
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+cd ~/Downloads/
+git config --global user.name "muralitheda"  
+git config --global user.email "yourmailaddress@dot.com"  
+git config --list  
+git init  
+cd .git/  
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/ gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
+
+#dataset verification : custs
+gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
+
+```
+
+4. **Create/Download the following DAG Code, modify project_id & upload to the Airflow DAG GCS bucket**
+* Note: This DAG is using the same usecase5 pyspark code we generated in usecase6
+```python
+"""
+FileName: Usecase7_eph_cluster_gcs_bq_DAG2.py
+"""
+import os
+import datetime
+from airflow import models
+from airflow.providers.google.cloud.operators.dataproc import (
+   DataprocCreateClusterOperator,
+   DataprocSubmitJobOperator,
+   DataprocDeleteClusterOperator,
+)
+from airflow.providers.google.cloud.sensors.dataproc import DataprocJobSensor
+from airflow.utils.dates import days_ago
+
+PROJECT_ID = "iz-cloud-training-project"
+CLUSTER_NAME="singlenode-ondemand-ephemeral-dataproc-cluster-1"
+REGION = "us-central1"
+ZONE = "us-central1-a"
+PYSPARK_CODE1_URI = "gs://iz-cloud-training-project-bucket/codebase/code_Usecase6_step1_gcs_bq.py"
+BIGQUERY_CONNECTOR_JAR="gs://spark-lib/bigquery/spark-3.1-bigquery-0.32.2.jar"
+
+default_args = {
+    "start_date": days_ago(1),
+    "project_id": PROJECT_ID,
+}
+
+with models.DAG(
+    "usecase-7-DAG-To-Create-Submit-PySpark-Task-Delete-EPH-Cluster",
+    default_args=default_args,
+    schedule_interval=datetime.timedelta(days=1),  
+) as dag:
+   
+    # Define cluster configuration for a single-node cluster
+    cluster_config = {
+        "master_config": {
+            "num_instances": 1,
+            "machine_type_uri": "e2-standard-4",
+            "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
+        },
+        "worker_config": {
+            "num_instances": 0,  # Single-node cluster doesn't have worker nodes
+        },
+        "software_config": {
+            "optional_components": [],
+            "properties": {"spark:spark.jars": BIGQUERY_CONNECTOR_JAR},
+            "image_version": "2.1-rocky8",
+        },
+    }
+
+    # Define the cluster creation task
+    create_cluster = DataprocCreateClusterOperator(
+        task_id='create_cluster',
+        project_id=PROJECT_ID,
+        region=REGION,
+        cluster_name=CLUSTER_NAME,
+        cluster_config=cluster_config,
+    )
+
+    # Define the PySpark job parameters
+    pyspark_job_params = {
+        "reference": {"project_id": PROJECT_ID},
+        "placement": {"cluster_name": CLUSTER_NAME},
+        "pyspark_job": {"main_python_file_uri": PYSPARK_CODE1_URI},
+    }
+
+    # Define the PySpark job submission task
+    submit_pyspark_job = DataprocSubmitJobOperator(
+        task_id="submit_pyspark_job", 
+        job=pyspark_job_params, 
+        region=REGION, 
+        project_id=PROJECT_ID,
+    )
+
+    # Define the cluster deletion task
+    delete_cluster = DataprocDeleteClusterOperator(
+        task_id='delete_cluster',
+        project_id=PROJECT_ID,
+        region=REGION,
+        cluster_name=CLUSTER_NAME,
+        trigger_rule='all_done',  # Ensure cluster deletion runs even if the job fails
+    )
+
+    # Set task dependencies
+    create_cluster >> submit_pyspark_job >> delete_cluster
+
+```
+
+5. **Composer Code Copy into the Composer DAGs folder**
+
+* **Option #1 Using gsutil copy into Composer DAGs bucket**  
+```bash
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase7_eph_cluster_gcs_bq_DAG2.py gs://us-central1-composer1-d8313ede-bucket/dags/
+```
+
+6. **Composer UI Navigation:**
+
+    1. **Goto the Composer Airflow Webserver UI – Dag copied in the bucket will be triggered based on the schedule**
+    <img src="images/airflow_dashboard.png" alt="Composer Airflow">
+   
+    2. **Click on the Graph to look at the DAG run info including duration, status and logs etc.,**
+    <img src="images/Airflow-DAG-Run-Details.png" alt="Composer Airflow Job Details">
