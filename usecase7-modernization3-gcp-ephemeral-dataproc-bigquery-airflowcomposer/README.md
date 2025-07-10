@@ -65,7 +65,7 @@ bq mk curatedds
 cd ~/Downloads/ 
 git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
 
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/ gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/Usecase7_eph_cluster_gcs_bq_DAG2.py gs://iz-cloud-training-project-bucket/codebase/
 gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
 
 #dataset verification : custs
