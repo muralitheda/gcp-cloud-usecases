@@ -61,4 +61,4 @@ Finally, the curated data in BigQuery is utilized by tools like **Google Data St
    2. Performed by Cloud Platform Engineers/Admins
    3. Composer instances will run 24/7.
    4. All the projects (Developers) will use the common (CC) Airflow Scheduler as a common platform.
-   5. Note: Ensure to terminate the Composer cluster post usage
+   5. **Note: Ensure to terminate the Composer cluster post usage.**
