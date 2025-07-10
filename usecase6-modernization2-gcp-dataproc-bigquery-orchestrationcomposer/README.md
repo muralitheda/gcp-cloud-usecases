@@ -152,10 +152,10 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs
 ```
 
 * **Alternate Option #2.1 Goto the Composer DAGs folder** 
-<img src="images/composer_dashboard.png" alt="Composer Dashboard">
+   <img src="images/composer_dashboard.png" alt="Composer Dashboard">
 
 * **Alternate Option #2.2 Copy the DAG.py file into the DAGs folder** 
-<img src="images/composer_DAGs_bucket.png" alt="Composer DAGs bucket">
+   <img src="images/composer_DAGs_bucket.png" alt="Composer DAGs bucket">
 
 * Note: Add **Composer Administrator** role into the **service account** & **account owner emailid account** in IAM for Airflow full access.
 
