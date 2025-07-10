@@ -4,11 +4,11 @@ from airflow import models
 from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitJobOperator
 from airflow.utils.dates import days_ago
 
-PROJECT_ID = "we43-dev-proj-1"
-CLUSTER_NAME="singlenode-dplr-cluster"
+PROJECT_ID = "iz-cloud-training-project"
+CLUSTER_NAME="singlenode-cluster-dataproc-1"
 REGION = "us-central1"
 ZONE = "us-central1-a"
-PYSPARK_CODE1_URI = "gs://inceptez-data-store2/Usecase5_gcsToBQRawToBQCurated.py"#this code is kept in your bucket location
+PYSPARK_CODE1_URI = "gs://iz-cloud-training-project-bucket/codebase/code_Usecase6_step1_gcs_bq.py"#this code is kept in your bucket location
 
 default_args = {"start_date": days_ago(1),"project_id": PROJECT_ID,}
 
