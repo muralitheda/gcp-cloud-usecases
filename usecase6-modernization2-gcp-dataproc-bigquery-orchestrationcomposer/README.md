@@ -92,7 +92,25 @@ bq query --use_legacy_sql=false "delete from rawds.customer_raw where  1=1;"
 bq query --use_legacy_sql=false "delete from curatedds.customer_curated where 1=1;"
 ```
 
-6. **Create the following DAG/Workflow code and upload to the Airflow DAG GCS bucket.**
+6. **Ensure to copy the code and custs data**
+```bash
+#sudo yum install git  
+git config --global user.name "muralitheda"  
+git config --global user.email "yourmailaddress@dot.com"  
+git config --list  
+git init  
+cd .git/  
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase6-modernization2-gcp-dataproc-bigquery-orchestrationcomposer/Usecase6_lr_cluster_gcs_bq_DAG1.py gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase6-modernization2-gcp-dataproc-bigquery-orchestrationcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
+
+#dataset verification : custs
+gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
+
+```
+
+7. **Create the following DAG/Workflow code and upload to the Airflow DAG GCS bucket.**  
 **Note: This DAG is using the same usecase5 pyspark code**
 ```python
 """
