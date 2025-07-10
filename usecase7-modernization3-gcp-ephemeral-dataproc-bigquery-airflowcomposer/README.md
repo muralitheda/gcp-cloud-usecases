@@ -39,6 +39,6 @@ The data journey begins with raw data being landed in **Google Cloud Storage**. 
 
 Post-processing, the data is loaded into **Google BigQuery**, which serves as our scalable data warehouse. We maintain a **Raw Layer** for initial ingestion and a **Curated Layer** for analytics-ready data.
 
-The entire workflow, including the intelligent provisioning and de-provisioning of the ephemeral Dataproc clusters, is meticulously orchestrated using **Google Cloud Composer (Apache Airflow)**. Our Airflow DAGs are responsible for managing the entire lifecycle – from initiating the ephemeral cluster, submitting the Spark jobs, monitoring their execution, to finally tearing down the cluster. This automation ensures both efficiency and significant cost reduction.
+The entire workflow, including the intelligent provisioning and de-provisioning of the ephemeral Dataproc clusters, is meticulously orchestrated using **Google Cloud Composer (Apache Airflow)**. <u>Our Airflow DAGs are responsible for managing the entire lifecycle – from initiating the ephemeral cluster, submitting the Spark jobs, monitoring their execution, to finally tearing down the cluster.</u> This automation ensures both efficiency and significant cost reduction.
 
 Finally, the curated data in BigQuery is utilized by tools like **Google Data Studio** for powerful data visualization and reporting, enabling our stakeholders to derive insights efficiently and cost-effectively.
