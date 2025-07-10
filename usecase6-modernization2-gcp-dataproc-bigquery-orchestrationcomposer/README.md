@@ -144,8 +144,13 @@ with models.DAG(
    pyspark_task = DataprocSubmitJobOperator(task_id="pyspark_task1", job=pyspark_job_params, region=REGION, project_id=PROJECT_ID)
 ```
 
-8. **Composer Code Copy into the Composer's DAGs folder**
-* **Option #1 Using gcloud copy into Composer's DAGs bucket** 
+8. **Composer Code Copy into the Composer DAGs folder**
+
+* **Option #1 Using gcloud copy into Composer DAGs bucket**  
+```bash
+gcloud cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs_bq_DAG1.py gs://us-central1-composer1-d8313ede-bucket/dags/
+```
+
 * **Option #2.1 Goto the Composer DAGs folder** 
 * **Option #2.2 Copy the DAG.py file into the DAGs folder** 
 
