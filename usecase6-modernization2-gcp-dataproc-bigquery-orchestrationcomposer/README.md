@@ -92,3 +92,7 @@ bq query --use_legacy_sql=false "delete from rawds.customer_raw where  1=1;"
 bq query --use_legacy_sql=false "delete from curatedds.customer_curated where 1=1;"
 ```
 
+**Tip # Delete the cluster** 
+```bash
+gcloud dataproc clusters delete singlenode-cluster-dataproc-1 --region=us-central1
+```
