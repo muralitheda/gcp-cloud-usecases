@@ -144,6 +144,12 @@ with models.DAG(
    pyspark_task = DataprocSubmitJobOperator(task_id="pyspark_task1", job=pyspark_job_params, region=REGION, project_id=PROJECT_ID)
 ```
 
+8. **Composer Code Copy into the Composer's DAGs folder**
+* **Option #1 Using gcloud copy into Composer's DAGs bucket** 
+* **Option #2.1 Goto the Composer DAGs folder** 
+* **Option #2.2 Copy the DAG.py file into the DAGs folder** 
+
+
 **Tip # Delete the cluster** 
 ```bash
 gcloud dataproc clusters delete singlenode-cluster-dataproc-1 --region=us-central1
