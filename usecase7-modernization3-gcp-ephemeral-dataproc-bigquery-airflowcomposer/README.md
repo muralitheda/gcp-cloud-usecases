@@ -62,16 +62,11 @@ bq mk curatedds
 3. **Ensure to copy the code and custs data**
 ```bash
 #Use your local PC/VM and make sure gcloud is already installed
-cd ~/Downloads/
-git config --global user.name "muralitheda"  
-git config --global user.email "yourmailaddress@dot.com"  
-git config --list  
-git init  
-cd .git/  
+cd ~/Downloads/ 
 git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
 
-gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/ gs://iz-cloud-training-project-bucket/codebase/
-gsutil cp /home/hduser/.git/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/ gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase7-modernization3-gcp-ephemeral-dataproc-bigquery-airflowcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
 
 #dataset verification : custs
 gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
