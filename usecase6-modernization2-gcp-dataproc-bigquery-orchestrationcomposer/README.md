@@ -66,4 +66,29 @@ Finally, the curated data in BigQuery is utilized by tools like **Google Data St
 2. **Screenshots:**
 <img src="images/composer_creation_steps.png" alt="Composer Creation Steps">
 
-3. **Third Step**
+3. **Prerequisties:**
+
+```bash
+gcloud auth login
+```
+
+4. **Creating a single node long running cluster):**
+
+```bash
+gcloud dataproc clusters create singlenode-cluster-dataproc-1 --region us-central1 --zone us-central1-a --enable-component-gateway --single-node --master-machine-type e2-standard-2 --master-boot-disk-size 100 --image-version 2.1-rocky8 --project iz-cloud-training-project --max-idle 7200s
+```
+```bash
+#Check cluster running status
+gcloud dataproc clusters describe singlenode-cluster-dataproc-1 --region=us-central1
+```
+```bash
+#Connect to cluster master/edge node
+gcloud compute ssh --zone "us-central1-a" "singlenode-cluster-dataproc-1-m" --project "iz-cloud-training-project"
+```
+
+5. **Delete the tables in the BigQuery Datasets**
+```bash
+bq query --use_legacy_sql=false "delete from rawds.customer_raw where  1=1;"
+bq query --use_legacy_sql=false "delete from curatedds.customer_curated where 1=1;"
+```
+
