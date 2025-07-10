@@ -44,7 +44,7 @@ Orchestration of the data pipelines is critical for automation and management:
 
 ## Explaining the Pipelines:
 
-"In this project, we've built a comprehensive cloud-native data pipeline primarily on Google Cloud Platform. The core idea is to modernize our data processing capabilities and enable efficient analytics.
+In this project, we've built a comprehensive cloud-native data pipeline primarily on Google Cloud Platform. The core idea is to modernize our data processing capabilities and enable efficient analytics.
 
 Our pipelines start with data ingestion into **Google Cloud Storage**. From there, we leverage a **Dataproc Long Running Cluster** with **Spark SQL** for heavy-duty data transformations and processing. This allows us to handle large volumes of data efficiently.
 
@@ -52,4 +52,4 @@ The processed data is then loaded into **Google BigQuery**, our scalable data wa
 
 The entire end-to-end workflow, from data ingestion to processing in Dataproc and loading into BigQuery, is meticulously orchestrated using **Google Cloud Composer**, which is a managed Apache Airflow service. Cloud Composer allows us to define our data flows as Directed Acyclic Graphs (DAGs), enabling automated scheduling, dependency management, error handling, and monitoring. This ensures our data pipelines are reliable, repeatable, and easily scalable.
 
-Finally, the curated data in BigQuery is utilized by tools like **Google Data Studio** or **Looker** to create interactive dashboards and reports, providing valuable business insights."
+Finally, the curated data in BigQuery is utilized by tools like **Google Data Studio** or **Looker** to create interactive dashboards and reports, providing valuable business insights.
