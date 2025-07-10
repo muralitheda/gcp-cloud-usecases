@@ -1,10 +1,10 @@
 # Cloud Modernization Project: Dataproc to BigQuery with Cloud Composer Orchestration
 
-## Overview
+## 1. Overview
 
 This project, "Use Case #6: CLOUD MODERNIZATION2 & Orchestration Composer-Dataproc - BQ", focuses on modernizing data processing pipelines by leveraging Google Cloud services for data storage, processing, and orchestration, ultimately loading data into Google BigQuery for analytical purposes.
 
-## Use Cases / Project Steps
+## 2. Use Cases / Project Steps
 
 The following steps outline the core processes involved in this modernization effort:
 
@@ -15,7 +15,7 @@ The following steps outline the core processes involved in this modernization ef
 5.  **Monitor DAG Run Status:** The status of the DAG run is monitored in the Airflow UI.
 6.  **Validate Data:** Data in the BigQuery tables (Raw and Curated layers) is validated.
 
-## Architecture
+## 3. Architecture
 
 The project leverages a robust Google Cloud Platform (GCP) based architecture for data processing and analytics:
 
@@ -26,7 +26,7 @@ The project leverages a robust Google Cloud Platform (GCP) based architecture fo
 * **Google Data Studio / Looker:** Used for data visualization and dashboarding, consuming data from the BigQuery curated layer.
 * **Cloud Composer (Airflow Orchestration & Scheduling):** Acts as the central orchestration engine, managing and scheduling the entire data pipeline workflow, from data ingestion to BigQuery loading.
 
-## Cloud Native Distribution Cluster (Managed Service)
+## 4. Cloud Native Distribution Cluster (Managed Service)
 
 The project utilizes or considers various managed services for distributed processing:
 
@@ -34,7 +34,7 @@ The project utilizes or considers various managed services for distributed proce
 * **EMR** (AWS)
 * **HDInsight** (MS)
 
-## Orchestration
+## 5. Orchestration
 
 Orchestration of the data pipelines is critical for automation and management:
 
@@ -42,7 +42,7 @@ Orchestration of the data pipelines is critical for automation and management:
 * **Scheduling - Cron Scheduler:** For traditional scheduled tasks.
 * **Cloud Composer (Airflow):** The primary and most advanced orchestration tool, providing robust workflow management, scheduling, and monitoring capabilities.
 
-## Explaining the Pipelines:
+## 6. Explaining the Pipelines:
 
 In this project, we've built a comprehensive cloud-native data pipeline primarily on Google Cloud Platform. The core idea is to modernize our data processing capabilities and enable efficient analytics.
 
@@ -53,3 +53,12 @@ The processed data is then loaded into **Google BigQuery**, our scalable data wa
 The entire end-to-end workflow, from data ingestion to processing in Dataproc and loading into BigQuery, is meticulously orchestrated using **Google Cloud Composer**, which is a managed Apache Airflow service. Cloud Composer allows us to define our data flows as Directed Acyclic Graphs (DAGs), enabling automated scheduling, dependency management, error handling, and monitoring. This ensures our data pipelines are reliable, repeatable, and easily scalable.
 
 Finally, the curated data in BigQuery is utilized by tools like **Google Data Studio** or **Looker** to create interactive dashboards and reports, providing valuable business insights.
+
+## 7. Steps to Execute the Use Case:
+
+1. **GCP Cloud Composer (Apache Airflow) Cluster Creation**
+   1. Once for all activity
+   2. Performed by Cloud Platform Engineers/Admins
+   3. Composer instances will run 24/7.
+   4. All the projects (Developers) will use the common (CC) Airflow Scheduler as a common platform.
+   5. Note: Ensure to terminate the Composer cluster post usage
