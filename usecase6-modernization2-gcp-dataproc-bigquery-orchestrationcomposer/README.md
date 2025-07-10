@@ -75,7 +75,7 @@ gcloud auth login
 4. **Creating a single node long running cluster):**
 
 ```bash
-gcloud dataproc clusters create singlenode-cluster-dataproc-1 --region us-central1 --zone us-central1-a --enable-component-gateway --single-node --master-machine-type e2-standard-2 --master-boot-disk-size 100 --image-version 2.1-rocky8 --project iz-cloud-training-project --max-idle 7200s
+gcloud dataproc clusters create singlenode-cluster-dataproc-1 --region us-central1 --zone us-central1-a --enable-component-gateway --single-node --master-machine-type e2-standard-4 --master-boot-disk-size 100 --image-version 2.1-rocky8 --project iz-cloud-training-project --max-idle 7200s
 ```
 ```bash
 #Check cluster running status
