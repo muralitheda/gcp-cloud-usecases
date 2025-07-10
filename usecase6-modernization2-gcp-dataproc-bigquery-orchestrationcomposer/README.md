@@ -159,6 +159,13 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs
 
 * Note: Add **Composer Administrator** role into the **service account** & **account owner emailid account** in IAM for Airflow full access.
 
+
+9. **Composer UI Navigation**
+   1. **Goto the Composer Airflow Webserver UI – Dag copied in the bucket will be triggered based on the schedule**
+   <img src="images/airflow_dashboard.png" alt="Composer Airflow">
+   2. **Click on the Graph to look at the DAG run info including duration, status and logs etc.,**
+   <img src="images/Airflow-DAG-Run-Details.png" alt="Composer Airflow Job Details">
+
 **Tip # Delete the cluster** 
 ```bash
 gcloud dataproc clusters delete singlenode-cluster-dataproc-1 --region=us-central1
