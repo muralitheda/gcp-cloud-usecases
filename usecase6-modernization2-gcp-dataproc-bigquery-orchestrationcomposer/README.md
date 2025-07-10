@@ -56,9 +56,14 @@ Finally, the curated data in BigQuery is utilized by tools like **Google Data St
 
 ## 7. Steps to Execute the Use Case:
 
-1. **GCP Cloud Composer (Apache Airflow) Cluster Creation**
+1. **GCP Cloud Composer (Apache Airflow) Cluster Creation:**
    1. Once for all activity
    2. Performed by Cloud Platform Engineers/Admins
    3. Composer instances will run 24/7.
    4. All the projects (Developers) will use the common (CC) Airflow Scheduler as a common platform.
    5. **Note: Ensure to terminate the Composer cluster post usage.**
+   
+2. **Screenshots:**
+<img src="images/composer_creation_steps.png" alt="Composer Creation Steps">
+
+3. **Third Step**
