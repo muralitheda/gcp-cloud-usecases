@@ -146,9 +146,9 @@ with models.DAG(
 
 8. **Composer Code Copy into the Composer DAGs folder**
 
-* **Option #1 Using gcloud copy into Composer DAGs bucket**  
+* **Option #1 Using gsutil copy into Composer DAGs bucket**  
 ```bash
-gcloud cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs_bq_DAG1.py gs://us-central1-composer1-d8313ede-bucket/dags/
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs_bq_DAG1.py gs://us-central1-composer1-d8313ede-bucket/dags/
 ```
 
 * **Option #2.1 Goto the Composer DAGs folder** 
