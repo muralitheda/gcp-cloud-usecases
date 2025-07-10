@@ -9,11 +9,11 @@ from airflow.providers.google.cloud.operators.dataproc import (
 from airflow.providers.google.cloud.sensors.dataproc import DataprocJobSensor
 from airflow.utils.dates import days_ago
 
-PROJECT_ID = "weekday-32-proj-427802-a6"
-CLUSTER_NAME="singlenode-dpeph-cluster"
+PROJECT_ID = "iz-cloud-training-project"
+CLUSTER_NAME="singlenode-ondemand-ephemeral-dataproc-cluster-1"
 REGION = "us-central1"
 ZONE = "us-central1-a"
-PYSPARK_CODE1_URI = "gs://inceptez-common-bucket/code/Usecase6_step1_gcs_bq.py"
+PYSPARK_CODE1_URI = "gs://iz-cloud-training-project-bucket/codebase/code_Usecase6_step1_gcs_bq.py"
 BIGQUERY_CONNECTOR_JAR="gs://spark-lib/bigquery/spark-3.1-bigquery-0.32.2.jar"
 
 default_args = {
@@ -31,7 +31,7 @@ with models.DAG(
     cluster_config = {
         "master_config": {
             "num_instances": 1,
-            "machine_type_uri": "e2-standard-2",
+            "machine_type_uri": "e2-standard-4",
             "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
         },
         "worker_config": {
@@ -40,7 +40,7 @@ with models.DAG(
         "software_config": {
             "optional_components": [],
             "properties": {"spark:spark.jars": BIGQUERY_CONNECTOR_JAR},
-            "image_version": "2.1-debian11",
+            "image_version": "2.1-rocky8",
         },
     }
 
