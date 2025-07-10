@@ -63,7 +63,7 @@ Finally, the curated data in BigQuery is utilized by tools like **Google Data St
    4. All the projects (Developers) will use the common (CC) Airflow Scheduler as a common platform.
    5. **Note: Ensure to terminate the Composer cluster post usage.**
    
-2. **Screenshots:**
+2. **Screenshot of Composer Creation:**
 <img src="images/composer_creation_steps.png" alt="Composer Creation Steps">
 
 3. **Prerequisties:**
@@ -152,8 +152,12 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase6_lr_cluster_gcs
 ```
 
 * **Option #2.1 Goto the Composer DAGs folder** 
-* **Option #2.2 Copy the DAG.py file into the DAGs folder** 
+<img src="images/composer_dashboard.png" alt="Composer Dashboard">
 
+* **Option #2.2 Copy the DAG.py file into the DAGs folder** 
+<img src="images/composer_DAGs_bucket.png" alt="Composer DAGs bucket">
+
+* Note: Add **Composer Administrator** role into the ServiceAccount & account_owner email-id account in IAM.
 
 **Tip # Delete the cluster** 
 ```bash
