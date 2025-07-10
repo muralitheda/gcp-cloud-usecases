@@ -173,7 +173,7 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase7_eph_cluster_gc
 6. **Composer UI Navigation:**
 
     1. **Goto the Composer Airflow Webserver UI – Dag copied in the bucket will be triggered based on the schedule**
-    <img src="images/airflow_dashboard.png" alt="Composer Airflow">
+    <img src="images/airflow_dag_overview.png" alt="Composer Airflow">
    
     2. **Click on the Graph to look at the DAG run info including duration, status and logs etc.,**
-    <img src="images/Airflow-DAG-Run-Details.png" alt="Composer Airflow Job Details">
+    <img src="images/airflow_graph.png" alt="Composer Airflow Job Details">
