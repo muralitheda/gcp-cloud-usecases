@@ -91,7 +91,7 @@ from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.providers.google.cloud.operators.dataproc import DataprocCreateBatchOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocDeleteBatchOperator
-from datetime import datetime
+import datetime
 PROJECT_ID = "iz-cloud-training-project"
 REGION = "us-central1"
 ZONE = "us-central1-a"

@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.providers.google.cloud.operators.dataproc import DataprocCreateBatchOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocDeleteBatchOperator
-from datetime import datetime
+import datetime
 PROJECT_ID = "iz-cloud-training-project"
 REGION = "us-central1"
 ZONE = "us-central1-a"
@@ -20,7 +20,7 @@ default_args = {
 dag = DAG('DAG-Usecase-8-To-Submit-PySpark-Task-Serverless-Spark-Cluster',
     default_args=default_args,
     description='Submit a serverless Spark job to Dataproc',
-    schedule_interval= datetime.timedelta(days=1),  
+    schedule_interval= datetime.timedelta(days=1),
     tags=['iz-serverless'],)
 
 
