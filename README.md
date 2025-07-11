@@ -1,4 +1,4 @@
->  **Credits & References:** This project was coached by [Mr. Mohamed Irfan from Inceptez Technologies](https://github.com/mohamedirfan?tab=repositories).
+>  Credits & References: This project was coached by [Mr. Mohamed Irfan from Inceptez Technologies](https://github.com/mohamedirfan?tab=repositories).
 
 This README outlines various use cases for Dataproc clusters, focusing on data migration, lifting & shifting existing workloads, and modernizing data pipelines for cost savings and optimization.
 
