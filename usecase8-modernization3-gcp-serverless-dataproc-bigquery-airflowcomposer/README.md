@@ -162,7 +162,7 @@ create_batch >> delete_batch
 
 * **Option #1 Using gsutil copy into Composer DAGs bucket**  
 ```bash
-gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase8_serverless_spark_gcs_bq_DAG3.py gs://us-central1-composer1-d8313ede-bucket/dags/
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase8_serverless_spark_gcs_bq_DAG3.py gs://us-central1-composer1-de69212f-bucket/dags/
 ```
 
 6. **Composer UI Navigation:**
