@@ -107,7 +107,7 @@ Submit the PySpark job, ensuring you include the GCS connector JAR in the `--jar
 > **Important:** If you have previously copied the `gcs-connector-hadoop-latest.jar` to `/usr/local/mypyspark/jars`, remove it to avoid conflicts.
 
 ```bash
-mypyspark-submit --jars /home/hduser/gcp/gcs-connector-hadoop2-2.2.7.jar /home/hduser/gcp/usecase_1_2_job.py
+spark-submit --jars /home/hduser/gcp/gcs-connector-hadoop2-2.2.7.jar /home/hduser/gcp/usecase_1_2_job.py
 ```
 
 -----
