@@ -81,6 +81,9 @@ gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase8-modernization3-gcp-
 gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
 ```
 
+> **Note:** We need to enable the **Private Google Access (On)** in the  **VPC** -> **Subnet** to have the Serverless usecase executed
+
+
 4. **Create/Download the following DAG Code, modify project_id & upload to the Airflow DAG GCS bucket**
 * Note: This DAG is using the same usecase5 pyspark code we generated in usecase6
 ```python
