@@ -66,3 +66,17 @@ bq query --use_legacy_sql=false "delete from curatedds.customer_curated where 1=
 bq mk rawds
 bq mk curatedds
 ```
+
+3. **Ensure to copy the code into codebase bucket and custs data**
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+cd ~/Downloads/ 
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase8-modernization3-gcp-serverless-dataproc-bigquery-airflowcomposer/Usecase8_serverless_spark_gcs_bq_DAG3.py gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase8-modernization3-gcp-serverless-dataproc-bigquery-airflowcomposer/Usecase8_serverless_spark_gcs_bq_DAG3_10mins_scheduler.py gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase8-modernization3-gcp-serverless-dataproc-bigquery-airflowcomposer/code_Usecase6_step1_gcs_bq.py gs://iz-cloud-training-project-bucket/codebase/
+
+#dataset verification : custs
+gsutil cat gs://iz-cloud-training-project-bucket/custs | head -n 5
+```
