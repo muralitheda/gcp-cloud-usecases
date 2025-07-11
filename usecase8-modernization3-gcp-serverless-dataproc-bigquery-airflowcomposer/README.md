@@ -168,7 +168,13 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/Usecase8_serverless_spa
 6. **Composer UI Navigation:**
 
     1. **Goto the Composer Airflow Webserver UI – Dag copied in the bucket will be triggered based on the schedule**
-    <img src="images/airflow_dag_overview.png" alt="Composer Airflow">
+    <img src="images/airflow1.png" alt="Composer Airflow">
    
     2. **Click on the Graph to look at the DAG run info including duration, status and logs etc.,**
-    <img src="images/airflow_graph.png" alt="Composer Airflow Job Details">
+    <img src="images/airflow2.png" alt="Composer Airflow Job Details">
+
+7. **Data validation in BigQueryt dataset using bq command line in local pc/vm**
+```bash
+bq query --use_legacy_sql=false "select * from rawds.customer_raw limit 10;"
+bq query --use_legacy_sql=false "select * from curatedds.customer_curated limit 10;"
+```
