@@ -97,7 +97,7 @@ Ensure the necessary files (service account JSON, GCS connector JAR, and Spark j
 ls -lrt /home/hduser/gcp
 /home/hduser/gcp/some-sa-key.json
 /home/hduser/gcp/gcs-connector-hadoop2-2.2.7.jar
-/home/hduser/gcp/gcp_usecase_1_2_job.py
+/home/hduser/gcp/usecase_1_2_job.py
 ```
 
 ### 6\. Submitting the Spark Job
