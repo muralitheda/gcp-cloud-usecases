@@ -16,9 +16,9 @@ def main():
    conf.set("fs.AbstractFileSystem.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS")
    conf.set("google.cloud.auth.service.account.json.keyfile","/home/hduser/gcp/gcp-serviceaccount.json")
 
-   print("========================================================================")
-   print("===== Usecase 1 - Data Transfer between HDFS to GCS and Vice versa =====")
-   print("========================================================================")
+   print("============================================================================")
+   print("===== Usecase 1 & 2 - Data Transfer between HDFS to GCS and Vice versa =====")
+   print("============================================================================")
    hdfs_df=spark.read.csv("hdfs://localhost:54310/user/hduser/datatotransfer/")
    print("[STEP 1/8] HDFS Read Completed Successfully")
    hdfscnt=hdfs_df.count()
