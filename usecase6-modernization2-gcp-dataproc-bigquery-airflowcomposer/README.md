@@ -12,9 +12,9 @@ The following steps outline the core processes involved in this modernization ef
 2. **Create DP LR Cluster:** If not already done, a Dataproc LR (Long Running) cluster is created to execute subsequent steps.
 3. **Delete Existing Data:** Data previously loaded in the BigQuery tables from Use Case 5 is deleted.
 4. **Create DAG Code:** The Directed Acyclic Graph (DAG) code is created and uploaded to the Airflow UI for orchestration.
-   1. A DAG contains multiple tasks.
-   2. Each task is an instantiation of an operator.
-   3. The operators provide the functionality for what each task does.
+   1. A DAG contains multiple tasks
+   2. Each task is an instantiation of an operator
+   3. The operators provide the functionality for what each task does
 5. **Monitor DAG Run Status:** The status of the DAG run is monitored in the Airflow UI.
 6. **Validate Data:** Data in the BigQuery tables (Raw and Curated layers) is validated.
 
