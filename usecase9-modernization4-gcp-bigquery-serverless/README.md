@@ -69,10 +69,38 @@ The final layer where processed data is consumed by various stakeholders and dow
 * **Visualization & Dashboarding:** Looker
 * **Data Ingestion:** CSV, JSON (with auto-schema detection capabilities)
 
-## Detail: Loading the RAW (Bronze) Layer
+**Prerequisties:**
+```bash
+gcloud auth login
+```
+**Ensure to copy the code into codebase bucket and custs data**
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+cd ~/Downloads/ 
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_d_consumer_bq_Outbound_data_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_consumer_bq_raw_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_c_consumer_bq_discovery_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_b_consumer_bq_curation_load.sql gs://iz-cloud-training-project-bucket/codebase/
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/dataset/*.* gs://iz-cloud-training-project-bucket/datasets/
+
+#dataset verification : custs
+gsutil ls gs://iz-cloud-training-project-bucket/dataset/
+```
+
+
+## Step1 :: Detail: Loading the RAW (Bronze) Layer
 This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
 <img src="images/usecase9_step1.png" alt="E2E Diagram">
 
+Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_consumer_bq_raw_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_consumer_bq_raw_load.sql
+```
 ## Step 2
 
 ## Step 3
