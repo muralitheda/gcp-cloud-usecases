@@ -12,7 +12,7 @@ Open command/terminal prompt
 gcloud auth login
 ```
 
-3. **Inside the VM**
+3. **If it is a VM, then:**  
 Import -> untar -> install -> N -> Y -> enter -> export
 ```bash
 cd /home/hduser/install
@@ -21,10 +21,10 @@ tar -xvf google-cloud-cli-linux-x86_64.tar.gz
 /home/hduser/install/google-cloud-sdk/install.sh
 ```
 
-Do you want to help improve the Google Cloud CLI (y/N)? **N** 
-Modify profile to update your $PATH and enable shell command completion? Do you want to continue (Y/n)?  **Y** 
-Enter a path to an rc file to update, or leave blank to use [/home/hduser/.bashrc]: **just type enter key**
-Run the below command finally in your command prompt:
+Do you want to help improve the Google Cloud CLI (y/N)? **N**   
+Modify profile to update your $PATH and enable shell command completion? Do you want to continue (Y/n)?  **Y**   
+Enter a path to an rc file to update, or leave blank to use [/home/hduser/.bashrc]: **just type enter key**  
+Run the below command finally in your command prompt:  
 ```bash
 source ~/.bashrc
 ```
