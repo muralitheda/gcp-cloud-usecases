@@ -4,10 +4,11 @@
 This document outlines a fully managed, serverless Data Warehouse (DWH) pipeline built on Google BigQuery, designed for robust data ingestion, transformation, analysis, and consumption in a public cloud (SaaS) context.
 
 ## Architecture Overview
-
-The pipeline consists of several distinct layers, each serving a specific purpose in the data lifecycle:
-
-<img src="images/usecase9-dataflow-diagram.png" alt="E2E Diagram">
+<details>
+  The pipeline consists of several distinct layers, each serving a specific purpose in the data lifecycle:
+  <summary> Click to view the E2E diagram </summary>
+  <img src="images/usecase9-dataflow-diagram.png" alt="E2E Diagram">
+</details>
 
 ### 1. Ingestion/RAW Layer
 
