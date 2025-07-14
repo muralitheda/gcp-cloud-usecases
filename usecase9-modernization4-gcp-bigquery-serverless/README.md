@@ -1,4 +1,3 @@
-![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Cloud Modernization: Public Cloud (SAAS Usecase) - Fully Managed (Serverless) DWH Usecase 9: BigQuery End-to-End Pipeline Building
 
