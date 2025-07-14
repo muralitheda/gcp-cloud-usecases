@@ -2,6 +2,8 @@
 
 This README outlines various use cases for Dataproc clusters, focusing on data migration, lifting & shifting existing workloads, and modernizing data pipelines for cost savings and optimization.
 
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 ## Dataproc Clusters Use Cases
 
 ### Usecase 1 & 2 – Migration of Legacy System to Bigdata and Data Access
