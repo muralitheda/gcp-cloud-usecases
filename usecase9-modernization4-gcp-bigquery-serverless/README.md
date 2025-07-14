@@ -95,10 +95,12 @@ gsutil ls gs://iz-cloud-training-project-bucket/dataset/
 
 ## Step1 :: Detail: Loading the RAW (Bronze) Layer
 This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
+
 <details>
   <summary>Click here to view flow diagram</summary>
     <img src="images/usecase9_step1.png" alt="E2E Diagram">
 </details>
+
 Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
 ```bash
 cd ~/Downloads
