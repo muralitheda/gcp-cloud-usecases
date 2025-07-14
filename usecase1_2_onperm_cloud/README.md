@@ -1,4 +1,3 @@
-![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Spark Application: HDFS to GCS Data Transfer (Online Transfer)
 

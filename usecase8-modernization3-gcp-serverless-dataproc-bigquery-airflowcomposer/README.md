@@ -1,4 +1,3 @@
-![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Use Case #8: Cloud Modernization with Dataproc Serverless for Cost Savings
 

@@ -1,7 +1,5 @@
 >  Credits & References: This project was coached by [Mr. Mohamed Irfan from Inceptez Technologies](https://github.com/mohamedirfan?tab=repositories).
 
-![Visits](https://some-badge-service.com/badge?page_id=https://github.com/muralitheda/gcp-cloud-usecases)
-
 This README outlines various use cases for Dataproc clusters, focusing on data migration, lifting & shifting existing workloads, and modernizing data pipelines for cost savings and optimization.
 
 ## Dataproc Clusters Use Cases

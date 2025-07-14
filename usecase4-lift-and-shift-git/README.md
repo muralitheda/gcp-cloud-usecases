@@ -1,4 +1,3 @@
-![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Hybrid Cloud (SAAS) Use Case: Long Running Cluster
 

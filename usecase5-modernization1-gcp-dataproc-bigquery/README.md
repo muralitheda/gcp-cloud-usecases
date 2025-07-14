@@ -1,4 +1,3 @@
-![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Use Case #5: Cloud Modernization 1 - Public Cloud (SaaS Use Case) Dataproc - BigQuery
 
