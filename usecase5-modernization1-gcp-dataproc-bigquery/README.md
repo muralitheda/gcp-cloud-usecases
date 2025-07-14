@@ -1,3 +1,5 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 # Use Case #5: Cloud Modernization 1 - Public Cloud (SaaS Use Case) Dataproc - BigQuery
 
 This README outlines a cloud modernization use case leveraging Google Cloud Platform (GCP) services for ETL (Extract, Transform, Load) and analytics. The core idea is to move from on-premises solutions (like Hive for analytics) to cloud-native, managed services, specifically using Dataproc for Spark-based ETL and BigQuery for powerful, scalable analytics.

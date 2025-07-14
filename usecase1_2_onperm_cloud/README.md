@@ -1,3 +1,5 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 # Spark Application: HDFS to GCS Data Transfer (Online Transfer)
 
 This guide provides instructions for setting up a Spark application to transfer data from an on-premise **Hadoop Distributed File System (HDFS)** to a **Google Cloud Storage (GCS)** bucket. This is crucial for **Cloud Data Engineers** working on hybrid data migration scenarios.

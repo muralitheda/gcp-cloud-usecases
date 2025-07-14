@@ -1,3 +1,4 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
 
 # Cloud Modernization Project: Dataproc Ephemeral Cluster for Cost-Saving with BigQuery & Cloud Composer
 

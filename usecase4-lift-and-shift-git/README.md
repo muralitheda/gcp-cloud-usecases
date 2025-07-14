@@ -1,3 +1,5 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 # Hybrid Cloud (SAAS) Use Case: Long Running Cluster
 
 This document outlines a specific use case (Use Case 4) for a hybrid cloud SAAS solution, focusing on a long-running cluster environment. It also touches upon the underlying GCP Cloud architecture and relevant interview preparation points.

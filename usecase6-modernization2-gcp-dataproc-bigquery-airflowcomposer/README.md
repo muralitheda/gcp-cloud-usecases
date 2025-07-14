@@ -1,3 +1,5 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 # Cloud Modernization Project: Dataproc to BigQuery with Cloud Composer Orchestration
 
 ## 1. Overview

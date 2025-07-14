@@ -1,3 +1,5 @@
+![Visits](https://komarev.com/ghpvc/?username=muralitheda&color=blueviolet&style=for-the-badge&label=Visitors)
+
 # Use Case #8: Cloud Modernization with Dataproc Serverless for Cost Savings
 
 This project focuses on modernizing data pipelines, achieving significant cost savings, and improving orchestration using Google Cloud's Dataproc Serverless, Composer, and BigQuery services.
