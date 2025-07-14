@@ -1,22 +1,32 @@
 EXPORT DATA
   OPTIONS (
-    uri = 'gs://inceptez-common-bucket/dataset/bqexport/*.csv',
+    uri = 'gs://iz-cloud-training-project-bucket/datasets/bqexport/*.csv',
     format = 'CSV',
     overwrite = true,
     header = true,
-    field_delimiter = ',')
+    field_delimiter = ','
+  )
 AS (
-select custno,txnno,search(category,'Outdoor') as outdoor_cat,category,strpos(category,'R') strpos_cat,rpad(category,30,' ') rpad_cat,reverse(category) rev_cat,
-length(category) len_cat,
-amount,
-row_number() over(partition by custno order by amount) rownum_amt ,
-rank() over(partition by custno order by amount) rnk_amt ,
-dense_rank() over(partition by custno order by amount) densernk_amt ,
-cume_dist() over(partition by custno order by amount) cumedist_amt,
-first_value(amount) over(partition by custno order by amount) first_trans_amt,
-nth_value(amount,3) over(partition by custno order by amount) third_highest_trans,
-lead(amount) over(partition by custno order by amount) next_trans,
-lag(amount) over(partition by custno order by amount) prev_trans,
- from `curatedds.trans_pos_part_cluster`
- where loaddt=current_date()
- );
+  SELECT
+    custno,
+    txnno,
+    SEARCH(category, 'Outdoor') AS outdoor_cat,
+    category,
+    STRPOS(category, 'R') AS strpos_cat,
+    RPAD(category, 30, ' ') AS rpad_cat,
+    REVERSE(category) AS rev_cat,
+    LENGTH(category) AS len_cat,
+    amount,
+    ROW_NUMBER() OVER(PARTITION BY custno ORDER BY amount) AS rownum_amt,
+    RANK() OVER(PARTITION BY custno ORDER BY amount) AS rnk_amt,
+    DENSE_RANK() OVER(PARTITION BY custno ORDER BY amount) AS densernk_amt,
+    CUME_DIST() OVER(PARTITION BY custno ORDER BY amount) AS cumedist_amt,
+    FIRST_VALUE(amount) OVER(PARTITION BY custno ORDER BY amount) AS first_trans_amt,
+    NTH_VALUE(amount, 3) OVER(PARTITION BY custno ORDER BY amount) AS third_highest_trans,
+    LEAD(amount) OVER(PARTITION BY custno ORDER BY amount) AS next_trans,
+    LAG(amount) OVER(PARTITION BY custno ORDER BY amount) AS prev_trans
+  FROM
+    `curatedds.trans_pos_part_cluster`
+  WHERE
+    loaddt = CURRENT_DATE()
+);
