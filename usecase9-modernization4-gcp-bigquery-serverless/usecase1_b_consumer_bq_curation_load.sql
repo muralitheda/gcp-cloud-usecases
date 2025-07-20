@@ -1,3 +1,4 @@
+
 -- Declare and set is equivalent to assigning a variable with value in other prog. languages
 -- eg. in python we create load_ts=datetime.now();
 DECLARE loadts TIMESTAMP;
@@ -5,23 +6,21 @@ SET loadts = (SELECT CURRENT_TIMESTAMP());
 -- loadts = 2025-07-16 08:55:10
 
 BEGIN
-
     -- How to achieve Complete Refresh (delete the entire target data and reload with the entire source data)
     -- option1: drop the existing table and recreate the table with the same structure then later reload the entire customer data (both structure and data deleted)
     -- option2: Truncate table and insert option can be used to load the table later (if the entire data has to be deleted) (entire data (only) deleted)
     -- option2: ****insert overwrite into table option is not supported in BQ as like hive
     -- option3: delete table (only the given date/hour) and insert option can be used later (entire/portion of data (only) deleted)
     -- interview questions: Difference between drop (create or replace table) (preference2), truncate (preference1) and delete(preference3).
-    -- interview questions: Difference between Hive & Bigquery - (Bigquery doesn't support insert overwrite and hive doesn't support create or replace table.
+    -- interview questions: Difference between Hive & Bigquery - (Bigquery doesn't support insert overwrite and hive doesn't support  create or replace table.
     -- interview questions: Difference between Hive & Bigquery - (Bigquery support delete and hive doesn't support Delete directly (we need some workaround)
-
     CREATE SCHEMA IF NOT EXISTS curatedds OPTIONS(location='us');
 
-    CREATE OR REPLACE TABLE curatedds.consumer_full_load (
+    CREATE OR REPLACE TABLE curatedds.consumer_full_load(
         custno INT64,
         fullname STRING,
         age INT64,
-        yearofbirth INT64,
+        yearofbirth INTEGER,
         profession STRING,
         loadts TIMESTAMP,
         loaddt DATE
@@ -33,8 +32,9 @@ BEGIN
 
     -- Interview2:
     -- Tell me the migration/modernization challenges you faced between hive and bigquery?
+    -- Performance optimization/Cost Optimization you did in BQ?
     -- Tell me about partition concept in Bigquery, why we needed and when do we go for partitioning?
-    -- It is same like hive, ie. partition will store the data internally into the given partition that is to improve filter performance by avoiding FTS (FULL TABLE SCAN)
+    -- It is same like hive, ie. partition will store the data internally into the given partition folders that is to improve filter performance by avoiding FTS (FULL TABLE SCAN)
     -- Tell me in a table how many partition columns can be created and what could be the datatypes?
     -- Only ONE (Level) partition column and datatype can be either date/integer and not string
     -- How many values can be kept in a partition column?
@@ -42,19 +42,22 @@ BEGIN
     -- & How it is different from Hive?
     -- Bigquery will support only date or integer columns type and not string for partitioning, where as hive supports string and other datatypes also
     -- Bigquery will support only single partitioning columns (no multi level partition), where as hive supports multiple (multi level) partitions columns
-    -- Syntax wise, bigquery can have the column for partition in both create table columns list and partition list also, where as hive only support the column in the partition which should not be defined in the create table columns list.
-    -- hive -> CREATE TABLE tbl1(id INT) PARTITIONED BY (load_dt DATE);
-    -- bq -> CREATE TABLE tbl1(id INTEGER,load_dt DATE) PARTITION BY load_dt;
+    -- Syntax wise, bigquery can have the column for partition in both create table columns list and partition also, where as hive only support the column in the partition which should not be defined in the create table columns list.
+    -- hive -> create table tbl1(id int) partitioned by (load_dt date);
+    -- bq -> create table tbl1(id integer,load_dt date) partition by load_dt;
 
     -- Partition management in Bigquery is simplified eg. We don't have msck repair/refreshing of the partition by keeping data in hdfs are not needed as like hive (because hive has metadata layer and data layer seperated).
+    -- Partition can be applied on low cardinal columns like (date, age)
 
     -- *** Important - challenge in migrating from hive to BQ
     -- Since, insert overwrite into table option is not supported in BQ as like hive, we can't do insert overwrite partition also.
-    -- as a workaround, we have to delete the data seperately, then load into the partition table. DELETE FROM table WHERE loaddt = loaddt(variable)
+    -- as a workaround, we have to delete the data seperately, then load into the partition table. delete from table where loaddt=loaddt(variable)
 
     -- Partitions can be created only on the low cardinal Date & Number columns, Maximum number of partitions can be only 4000
-
-    CREATE TABLE IF NOT EXISTS curatedds.trans_online_part (
+    -- create table if not exists tablename(id int,name string)
+    -- partitioned by (loaddt date,category string)
+    CREATE TABLE IF NOT EXISTS curatedds.trans_online_part
+    (
         transsk NUMERIC,
         customerid INT64,
         productname STRING,
@@ -66,7 +69,7 @@ BEGIN
         loaddt DATE
     )
     PARTITION BY loaddt
-    OPTIONS (require_partition_filter = FALSE);
+    OPTIONS (require_partition_filter = TRUE);
     -- require_partition_filter will enforce a mandatory partition filter to be used mandatorily for the user of the table
 
     -- Interview3: When do we go for Clustering in BQ? For join and filter performance improvement
@@ -75,9 +78,11 @@ BEGIN
     -- Clustering columns order of defining is very important
     -- Bigquery supports clustering (sorting and grouping/bucketing of the clustered columns) to improve filter and join performances
     -- BQ clustering is exactly equivalent to hive bucketing only syntax varies, symantics remains same...
-    -- bq syntax(cluster by col1,col2 upto max col4), hive syntax is (clustered by col1,col2... INTO 3 BUCKETS SORT BY col1,col2)
-
-    CREATE TABLE IF NOT EXISTS curatedds.trans_pos_part_cluster (
+    -- bq syntax(cluster by col1,col2 upto max col4), hive syntax is (clustered by col1,col2... into 3 buckets sort by col1,col2)
+    -- Clustering can be applied on both low/high cardinal columns like (date, age, custno)- start with low and lead to hight cardinal
+    -- In clustering order of columns is important
+    CREATE TABLE IF NOT EXISTS curatedds.trans_pos_part_cluster
+    (
         txnno NUMERIC,
         txndt DATE,
         custno INT64,
@@ -93,35 +98,43 @@ BEGIN
     PARTITION BY loaddt
     CLUSTER BY loaddt, custno, txnno
     OPTIONS (description = 'point of sale table with partition and clusters');
-
 END;
 
 -- Block1 for loading raw consumer data to the curated consumer table (Full Refresh) - using inline views (some name for the memory)
 BEGIN
-
     -- Interview4: Difference between delete, truncate and drop+recreate (create or replace table)
     -- delete -> DML, it help us delete the portion of data applying where clause and in BQ it is mandatory to use where clause (DELETE must have a WHERE clause at [1:1])
     -- truncate -> DDL, it help us delete the data entire data (without affecting the structure) without applying any filters (faster than delete).
-    -- drop -> DDL, it help us drop the table structure and data also.
     -- TRUNCATE TABLE curatedds.consumer_full_load;
-
+    -- drop -> DDL, it help us drop the table structure and data also.
     -- DATA MUNGING
-    -- cleansing - de duplication
+    -- clensing - de duplication
     -- scrubbing - replacing of null with some values
     -- curation (business logic) - concat
     -- Data enrichment - deriving a column from exiting or new column
     -- inline view (from clause subquery) is good for nominal data size, but not good for holding large volume of data in memory.. if volume is large, go with temp view.
-    ---- FROM CLAUSE SUB QUERY OR INLINE VIEW eg. SELECT cols FROM (SELECT cols FROM tbl) AS view;
+    ---- FROM CLAUSE SUB QUERY OR INLINE VIEW eg. select cols from (select cols from tbl) as view;
     -- We have an alternative for inline view by using qualify function
-    -- This is a Slowly Changing Dimension Type 1 Load (Since we are not maintaining History)
-    -- TRUNCATE TABLE curatedds.consumer_full_load;
+    -- This is a Slowly Changing Dimension (SCD1) Type 1 Load (Since we are not maintaining History)
     /*
     #subquery
-    SELECT * FROM rawds.consumer WHERE custid = (SELECT MAX(custid) FROM rawds.consumer)
-    #correlated subquery (outer query depend on inner query & vice versa)
-    For every row of execution of a parent query the child query will be executed and based on the child query
-    result the parent query will run..
-    SELECT * FROM rawds.consumer parent WHERE age = (SELECT MAX(age) FROM rawds.consumer child WHERE child.custid = parent.custid) AND custid = 4000011
+    --different types of subqueries? from clause subquery(inline view),subquery, multi row,
+    -- multi columns (not supported in BQ), coorelated subquery...
+    --Query within a query..
+    --in which clauses the subquery can be writterned?
+    --select, from, where,having?,group by?, order by?
+    SELECT * FROM
+    rawds.consumer irfan
+    --multicolumn subquery(not directly supported in bq)
+    --where concat(custid,age) in (select distinct concat(custid,age) from rawds.consumer where profession is null);
+    --coorelated subquery - Definition? For every row execution of parent query the sub query will be executed and response of child will be used by the parent for the final result
+    --anology example: irfan taking his daughter to choclate shop asking her to choose any dark choclates, daughter selected the choclate, irfan bought that from the store
+    WHERE EXISTS (SELECT 'yes' FROM rawds.consumer daughter WHERE irfan.custid = daughter.custid AND irfan.age = daughter.age AND daughter.profession IS NULL);
+    --select 'yes' from rawds.consumer daughter where daughter.custid=4007830 and daughter.age=21 and daughter.profession is null
+
+    SELECT *,(SELECT MAX(age) FROM rawds.consumer) max_age FROM
+    rawds.consumer irfan LIMIT 10;
+    --other than group by and order by, in any clauses we can use subquery...
     */
     INSERT INTO curatedds.consumer_full_load
     SELECT
@@ -148,15 +161,13 @@ BEGIN
                 profession,
                 ROW_NUMBER() OVER (PARTITION BY custid ORDER BY age DESC) AS rnk
             FROM rawds.consumer
-            --qualify rnk=1 #will help us avoid inline view
+            -- qualify rnk=1 #will help us avoid inline view
         ) AS inline_view
         WHERE rnk = 1
     ) AS dedup;
-
 END;
 
 BEGIN
-
     -- Interview5:
     -- In BigQuery, a temporary table is a session-scoped table that stores data in the underlying Colossus storage,
     -- not in memory like inline views.
@@ -176,9 +187,9 @@ BEGIN
     -- Converting from Semistructured to structured using unnest function (equivalent to explode in hive)
     -- generating surrogate key (unique identifier)
     -- Splitting of columns by extracting the string and number portion from the product column
-    -- SELECT REGEXP_REPLACE('4B2A', '[^0-9]','')
+    -- select regexp_replace('4B2A', '[^0-9]','')
     -- below stardardization will convert blankspace/nulls/number only to blankspace then to 'na', allow only the string portition to the target otherwise
-    -- CASE WHEN COALESCE(TRIM(REGEXP_REPLACE(LOWER(prod_exploded.productid),'[^a-z]','')),'')='' THEN 'na'
+    -- case when coalesce(trim(regexp_replace(lower(prod_exploded.productid),'[^a-z]','')),'')='' then 'na'
     -- adding some date and timestamp columns for load data.
 
     -- generate_uuid will generate unique id alphanumeric value, convert to number (hashing) using farm_fingerprint, make it positive value using abs function
@@ -190,12 +201,12 @@ BEGIN
     Nested (semi structured):
     orderId,storeLocation,customerId,products
                                      productId,productCategory,productName,productPrice
-    1        ,Newyork,       4000011     ,1234,      Laptop,          HP Pavilion,540
-                                         421,       Mobile,          Samsung S22,240
+    1      ,Newyork,      4000011   ,1234,     Laptop,         HP Pavilion,540
+                                     421,      Mobile,         Samsung S22,240
     Un Nested (structured):
     orderId,storeLocation,customerId,products.productId,products.productCategory,products.productName,products.productPrice
-    1        ,Newyork,       4000011     ,1234,      Laptop,          HP Pavilion,540
-    1        ,Newyork,       4000011     ,421,       Mobile,          Samsung S22,240
+    1      ,Newyork,      4000011   ,1234,     Laptop,         HP Pavilion,540
+    1      ,Newyork,      4000011   ,421,      Mobile,         Samsung S22,240
     */
     CREATE OR REPLACE TEMP TABLE online_trans_view AS
     SELECT
@@ -218,17 +229,18 @@ BEGIN
     FROM `rawds.trans_online` p,
     UNNEST(p.products) AS prod_exploded;
 
+
     ----Nested
     --4000015,[{Table,Furniture,440,34P},{Chair,Furniture,440,42A}]
     --Unnested
     --4000015,Table,Furniture,440,34P
     --4000015,Chair,Furniture,440,42A
 
-    -- visagan - I saw this delete statement based on load date with in our project in the begining of the each query file and they said its for job restartability/rerun of the jobs
+    -- visagan - I saw this delete statement based on load date with in our project in the begining of the each query file  and they said its for job restartability/rerun of the jobs
     DELETE FROM curatedds.trans_online_part WHERE loaddt = DATE(loadts);
 
     -- as like hive, we don't need parition(), we can't use insert overwrite -
-    -- INSERT OVERWRITE TABLE curatedds.trans_online_part PARTITION(loaddt) SELECT * FROM online_trans_view;
+    -- insert overwrite table curatedds.trans_online_part partition(loaddt) select * from online_trans_view;
     -- in BQ we have to delete the partition explicitly and load the data, if any data is going to be repeated.
     -- Loading of partition table in BQ,
 
@@ -239,23 +251,27 @@ BEGIN
     CREATE TABLE IF NOT EXISTS curatedds.trans_online_part_furniture AS SELECT * FROM online_trans_view WHERE 1 = 2;
     TRUNCATE TABLE curatedds.trans_online_part_furniture;
     INSERT INTO curatedds.trans_online_part_furniture SELECT * FROM online_trans_view WHERE productcategory = 'Furniture';
-
 END;
 
 BEGIN
-
     -- CURATION logic
     -- date format conversion and casting of string to date
     -- data conversion of product to na if null is there
     -- converted columns/some of the selected columns in an order, are not selected again by using except function
     INSERT INTO curatedds.trans_pos_part_cluster
-    SELECT txnno, PARSE_DATE('%m-%d-%Y', txndt) AS txndt, custno, amt, COALESCE(product, 'NA'), * EXCEPT(txnno, txndt, custno, amt, product), loadts, DATE(loadts) AS loaddt
+    SELECT
+        txnno,
+        PARSE_DATE('%m-%d-%Y', txndt) txndt,
+        custno,
+        amt,
+        COALESCE(product, 'NA'),
+        * EXCEPT(txnno, txndt, custno, amt, product),
+        loadts,
+        DATE(loadts) AS loaddt
     FROM `rawds.trans_pos`;
-
 END;
 
 BEGIN
-
     -- curation logic
     -- In the below usecase, storing the data into 3 year tables, because ...
     -- To improve the performance of picking only data from the given year table
@@ -271,7 +287,8 @@ BEGIN
     -- table segregation for all the above reasons mentioned.
     -- for current year 2023 date alone, we are making the future date as current date using INLINE VIEW/FROM CLAUSE SUBQUERY, to correct the data issue from the source.
 
-    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2021 (
+    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2021
+    (
         txnno NUMERIC,
         dt DATE,
         ts TIMESTAMP,
@@ -287,11 +304,24 @@ BEGIN
     PARTITION BY _PARTITIONDATE;
 
     INSERT INTO `curatedds.trans_mobile_autopart_2021` (txnno, dt, ts, geo_coordinate, net, provider, activity, postal_code, town_name, loadts, loaddt)
-    SELECT txnno, CAST(dt AS DATE) AS dt, TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts, ST_GEOGPOINT(long, lat) AS geo_coordinate, net, provider, activity, postal_code, town_name, loadts, DATE(loadts) AS loaddt
+    SELECT
+        txnno,
+        CAST(dt AS DATE) dt,
+        TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts,
+        ST_GEOGPOINT(long, lat) geo_coordinate,
+        net,
+        provider,
+        activity,
+        postal_code,
+        town_name,
+        loadts,
+        DATE(loadts) AS loaddt
     FROM `rawds.trans_mobile_channel`
     WHERE EXTRACT(YEAR FROM CAST(dt AS DATE)) = 2021;
 
-    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2022 (
+
+    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2022
+    (
         txnno NUMERIC,
         dt DATE,
         ts TIMESTAMP,
@@ -307,11 +337,23 @@ BEGIN
     PARTITION BY _PARTITIONDATE;
 
     INSERT INTO curatedds.trans_mobile_autopart_2022 (txnno, dt, ts, geo_coordinate, net, provider, activity, postal_code, town_name, loadts, loaddt)
-    SELECT txnno, CAST(dt AS DATE) AS dt, TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts, ST_GEOGPOINT(long, lat) AS geo_coordinate, net, provider, activity, postal_code, town_name, loadts, DATE(loadts) AS loaddt
+    SELECT
+        txnno,
+        CAST(dt AS DATE) dt,
+        TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts,
+        ST_GEOGPOINT(long, lat) geo_coordinate,
+        net,
+        provider,
+        activity,
+        postal_code,
+        town_name,
+        loadts,
+        DATE(loadts) AS loaddt
     FROM `rawds.trans_mobile_channel`
     WHERE EXTRACT(YEAR FROM CAST(dt AS DATE)) = 2022;
 
-    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2023 (
+    CREATE TABLE IF NOT EXISTS curatedds.trans_mobile_autopart_2023
+    (
         txnno NUMERIC,
         dt DATE,
         ts TIMESTAMP,
@@ -327,13 +369,18 @@ BEGIN
     PARTITION BY _PARTITIONDATE;
 
     INSERT INTO curatedds.trans_mobile_autopart_2023 (txnno, dt, ts, geo_coordinate, net, provider, activity, postal_code, town_name, loadts, loaddt)
-    SELECT txnno, CAST(dt AS DATE) AS dt, TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts, ST_GEOGPOINT(long, lat) AS geo_coordinate, net, provider, activity, postal_code, town_name, loadts, DATE(loadts) AS loaddt
-    FROM (
-        SELECT CASE WHEN CAST(dt AS DATE) > CURRENT_DATE() THEN CURRENT_DATE() ELSE dt END AS dt, * EXCEPT(dt)
-        FROM `rawds.trans_mobile_channel`
-    ) t
+    SELECT
+        txnno,
+        CAST(dt AS DATE) dt,
+        TIMESTAMP(CONCAT(dt, ' ', hour)) AS ts,
+        ST_GEOGPOINT(long, lat) geo_coordinate,
+        net,
+        provider,
+        activity,
+        postal_code,
+        town_name,
+        loadts,
+        DATE(loadts) AS loaddt
+    FROM (SELECT CASE WHEN CAST(dt AS DATE) > CURRENT_DATE() THEN CURRENT_DATE() ELSE dt END AS dt, * EXCEPT(dt) FROM `rawds.trans_mobile_channel`) t
     WHERE EXTRACT(YEAR FROM CAST(dt AS DATE)) = 2023;
-
-END;
-
 END;
