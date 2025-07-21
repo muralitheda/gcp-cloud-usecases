@@ -1,3 +1,8 @@
+/*
+author : muralitheda
+*/
+
+
 EXPORT DATA
   OPTIONS (
     uri = 'gs://iz-cloud-training-project-bucket/datasets/bqexport/*.csv',

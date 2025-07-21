@@ -1,3 +1,7 @@
+/*
+author : muralitheda
+*/
+
 -- Create discoveryds schema if it does not exist, with location 'us'
 CREATE SCHEMA IF NOT EXISTS discoveryds
 OPTIONS(location='us');

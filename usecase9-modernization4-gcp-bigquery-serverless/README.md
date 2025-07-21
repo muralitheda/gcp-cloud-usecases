@@ -47,7 +47,7 @@ gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-
 #dataset verification : custs
 gsutil ls gs://iz-cloud-training-project-bucket/dataset/
 ```
-**Step1 :: Detail: Loading the data into RAW (Bronze) Layer**
+**Step1 :: Loading the source data into BigQuery Raw(Bronze) Layer**  
 This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
 
 <details>
@@ -69,6 +69,21 @@ This layer transforms raw data into a clean, structured, and curated format suit
 * **BigQuery ETL (Curation):**
     * Processes include Data Discovery, Data Munging, Data Customization, Data Curation.
     * Supports Incremental/Complete Refresh strategies.
+
+**Step2 :: Loading the BigQuery raw data into BigQuery Curated(Silver) Layer**  
+This section details the loading process from the RAW Layer to Curated using different BigQuery PL\SQL building blocks.
+
+<details>
+  <summary>Click here to view flow diagram</summary>
+    <img src="images/usecase9_step2.png" alt="E2E Diagram">
+</details>
+
+Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_b_consumer_bq_curation_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_b_consumer_bq_curation_load.sql
+```
 
 ### 3. Analytical Layer
 

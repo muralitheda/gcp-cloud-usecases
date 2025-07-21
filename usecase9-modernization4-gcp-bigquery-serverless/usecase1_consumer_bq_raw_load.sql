@@ -1,3 +1,7 @@
+/*
+author : muralitheda
+*/
+
 --drop table rawds.trans_online;
 --drop table rawds.consumer;
 --drop table rawds.trans_pos;
