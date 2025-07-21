@@ -94,6 +94,21 @@ This layer prepares the curated data for various analytical and consumption purp
     * Calculates Key Performance Indicators (KPI) & Metrics.
     * Enables Analytical & Windowing functions.
 
+**Step3 :: Loading the BigQuery Curated data into BigQuery Discovery(Gold) Layer**  
+This section details the loading process from the Curated layer to Discovery layer using different BigQuery PL\SQL building blocks.
+
+<details>
+  <summary>Click here to view flow diagram</summary>
+    <img src="images/usecase9_step3.png" alt="E2E Diagram">
+</details>
+
+Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_b_consumer_bq_curation_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_c_consumer_bq_curation_load.sql
+```
+
 ### 4. Consumption Layer
 
 The final layer where processed data is consumed by various stakeholders and downstream systems.
