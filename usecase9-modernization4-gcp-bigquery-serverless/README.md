@@ -105,8 +105,8 @@ This section details the loading process from the Curated layer to Discovery lay
 Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
 ```bash
 cd ~/Downloads
-gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_c_consumer_bq_curation_load.sql ~/Downloads/
-bq query --use_legacy_sql=false < usecase1_c_consumer_bq_curation_load.sql
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_c_consumer_bq_discovery_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_cusecase1_c_consumer_bq_discovery_load.sql
 ```
 
 ### 4. Consumption Layer
