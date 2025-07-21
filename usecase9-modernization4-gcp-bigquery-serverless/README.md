@@ -123,7 +123,7 @@ The final layer where processed data is consumed by various stakeholders and dow
 * **File Export:**
     * Enables data export to `Egress/Downstream Systems/Outbound Feeds`.
   
-* **Step4 :: Outbound/Egress/Downstream systems layer**  
+**Step4 :: Outbound/Egress/Downstream systems layer**  
 This section details the loading process to outbound layer.
 
 <details>
