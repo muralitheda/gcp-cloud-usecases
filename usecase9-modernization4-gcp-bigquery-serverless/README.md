@@ -122,6 +122,21 @@ The final layer where processed data is consumed by various stakeholders and dow
     * Provides actionable insights for **Clients & Business Team** based on calculated KPIs and metrics.
 * **File Export:**
     * Enables data export to `Egress/Downstream Systems/Outbound Feeds`.
+  
+* **Step4 :: Outbound/Egress/Downstream systems layer**  
+This section details the loading process to outbound layer.
+
+<details>
+  <summary>Click here to view flow diagram</summary>
+    <img src="images/usecase9_step4.png" alt="E2E Diagram">
+</details>
+
+Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_d_consumer_bq_Outbound_data_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_d_consumer_bq_Outbound_data_load.sql
+```
 
 ## Key Stakeholders
 
