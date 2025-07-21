@@ -106,7 +106,7 @@ Either in the BQ Console or using bq command run in Cloud shell use the below qu
 ```bash
 cd ~/Downloads
 gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_c_consumer_bq_discovery_load.sql ~/Downloads/
-bq query --use_legacy_sql=false < usecase1_cusecase1_c_consumer_bq_discovery_load.sql
+bq query --use_legacy_sql=false < usecase1_c_consumer_bq_discovery_load.sql
 ```
 
 ### 4. Consumption Layer
