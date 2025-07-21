@@ -47,8 +47,7 @@ gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-
 #dataset verification : custs
 gsutil ls gs://iz-cloud-training-project-bucket/dataset/
 ```
-
-## Step1 :: Detail: Loading the data into RAW (Bronze) Layer
+**Step1 :: Detail: Loading the data into RAW (Bronze) Layer**
 This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
 
 <details>
