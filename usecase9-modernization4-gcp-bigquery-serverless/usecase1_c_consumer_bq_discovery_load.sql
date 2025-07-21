@@ -61,18 +61,18 @@ pos_mob_trans AS (
             WHEN mob.dt = pos.txndt THEN 'Same Day Trans' -- Indicates if mobile and POS transactions occurred on the same date
             ELSE 'Multi Day Trans'
         END AS trans_day,
-        COALESCE(mob.dt, pos.txndt) AS txndt, -- Selects the transaction date, preferring mobile if available
+        COALESCE(mob.dt, pos.txndt) AS txndt, -- Selects the transaction date, preferring mobile's date if available
         CASE
-            WHEN mob.txnno IS NULL THEN 'POS'      -- If only POS transaction exists
-            WHEN pos.txnno IS NULL THEN 'MOB'      -- If only Mobile transaction exists
-            ELSE 'POS_MOB'                         -- If both POS and Mobile transactions exist
+            WHEN mob.txnno IS NULL THEN 'POS'      -- If only a POS transaction exists
+            WHEN pos.txnno IS NULL THEN 'MOB'      -- If only a Mobile transaction exists
+            ELSE 'POS_MOB'                         -- If both POS and Mobile transactions exist for the same txnno
         END AS trans_type,
         mob.net,
         pos.amount,
         mob.geo_coordinate,
         mob.provider,
         CASE
-            WHEN mob.activity = 'STILL' THEN 'In Store Pickup' -- Standardizes 'STILL' activity to 'In Store Pickup'
+            WHEN mob.activity = 'STILL' THEN 'In Store Pickup' -- Standardizes 'STILL' activity to 'In Store Pickup' for consistency
             ELSE mob.activity
         END AS activity,
         pos.spendby,
@@ -90,56 +90,75 @@ pos_mob_trans AS (
     FULL JOIN
         `curatedds.trans_pos_part_cluster` AS pos    -- Joins with the clustered POS transactions table
     ON
-        mob.txnno = pos.txnno                      -- Joins on transaction number
+        mob.txnno = pos.txnno                      -- Joins on transaction number to link related transactions
 ),
+
 -- CTE 2: `cust_online_trans`
 -- Purpose: Joins the Customer dimension table with Online transactions.
--- It enriches online transaction data with customer details and identifies the transaction type as 'online'.
+-- This enriches online transaction data with core customer details and marks the transaction type as 'online'.
+-- Ambiguity Resolution: Explicitly select columns and alias `loadts` and `loaddt` from `cust` and `trans`
+-- to avoid naming conflicts when both tables contain these columns.
 cust_online_trans AS (
     SELECT
-        cust.*, -- Selects all columns from the customer table
-        trans.* EXCEPT(customerid), -- Selects all columns from online transactions, excluding redundant customerid
+        cust.custno,
+        cust.fullname,
+        cust.age,
+        cust.yearofbirth,   -- Explicitly select yearofbirth from customer
+        cust.profession,
+        cust.loadts AS consumer_loadts, -- Aliased to avoid ambiguity with online transaction loadts
+        cust.loaddt AS consumer_loaddt, -- Aliased to avoid ambiguity with online transaction loaddt
+        trans.transsk,
+        trans.productname,
+        trans.productcategory,
+        trans.productprice,
+        trans.productidint,
+        trans.prodidstr,
+        trans.loadts AS online_trans_loadts, -- Aliased to distinguish from consumer_loadts
+        trans.loaddt AS online_trans_loaddt, -- Aliased to distinguish from consumer_loaddt
         CASE
-            WHEN trans.transsk IS NOT NULL THEN 'online' -- Marks transaction as 'online' if an online transaction ID exists
+            WHEN trans.transsk IS NOT NULL THEN 'online' -- Assigns 'online' as transaction type if an online transaction ID exists
             ELSE NULL
-        END AS trans_type
+        END AS online_trans_type -- Aliased to distinguish from `trans_type` in `pos_mob_trans` CTE
     FROM
-        `curatedds.consumer_full_load` AS cust -- Customer master data (full load)
+        `curatedds.consumer_full_load` AS cust -- Customer master data (fully loaded and curated)
     LEFT JOIN
         `curatedds.trans_online_part` AS trans -- Online transactions (partitioned table)
     ON
-        cust.custno = trans.customerid -- Joins on customer number
+        cust.custno = trans.customerid -- Joins on customer number to link customers to their online activities
 )
+
 -- Final SELECT statement to combine all transaction types and customer data
--- This query performs the final denormalization and consolidation, handling potential NULLs
--- from the various `JOIN` operations to create a comprehensive record.
+-- This query performs the final denormalization and consolidation into the `consumer_trans_pos_mob_online` table.
+-- It intelligently handles potential `NULL` values resulting from `JOIN` operations, ensuring comprehensive records
+-- by coalescing values from different sources.
 SELECT
     COALESCE(trans.mob_txnno, trans.pos_txnno, cust.transsk) AS txnno, -- Consolidates transaction number from mobile, POS, or online
-    COALESCE(trans.txndt, cust.txndt) AS txndt,                       -- Consolidates transaction date
+    -- For txndt, prioritize transaction date from POS/Mobile, then use online transaction's load date as a fallback if no specific transaction date is available for online.
+    COALESCE(trans.txndt, cust.online_trans_loaddt) AS txndt,
     cust.custno,
     cust.fullname,
     cust.age,
     cust.profession,
     trans.trans_day,
-    COALESCE(cust.trans_type, trans.trans_type) AS trans_type,        -- Consolidates transaction type from customer-online or POS-mobile
-    COALESCE(trans.net, 'na') AS net,                                 -- Defaults mobile network to 'na' if null
-    COALESCE(cust.productprice, COALESCE(trans.amount, 0.0)) AS online_pos_amount, -- Consolidates amount from online or POS/mobile
+    COALESCE(cust.online_trans_type, trans.trans_type) AS trans_type, -- Consolidates the transaction type (e.g., 'online', 'POS', 'MOB', 'POS_MOB')
+    COALESCE(trans.net, 'na') AS net,                                 -- Defaults mobile network to 'na' if not available
+    COALESCE(cust.productprice, COALESCE(trans.amount, 0.0)) AS online_pos_amount, -- Prioritizes online product price, then POS/mobile amount, defaulting to 0.0
     trans.geo_coordinate,
-    COALESCE(trans.provider, 'na') AS provider,                       -- Defaults provider to 'na' if null
-    COALESCE(trans.activity, 'na') AS activity,                       -- Defaults activity to 'na' if null
-    COALESCE(trans.spendby, 'na') AS spendby,                         -- Defaults spendby to 'na' if null
-    COALESCE(trans.city, 'unknown') AS city,                          -- Defaults city to 'unknown' if null
-    COALESCE(trans.state, 'unknown') AS state,                        -- Defaults state to 'unknown' if null
-    COALESCE(cust.productcategory, trans.category) AS online_pos_category, -- Consolidates category from online or POS
-    trans.product,                                                    -- Product name from POS
-    COALESCE(trans.pos_loadts, trans.mob_loadts, cust.loadts) AS loadts, -- Consolidates load timestamp
-    COALESCE(trans.pos_loaddt, trans.mob_loaddt, cust.loaddt) AS loaddt  -- Consolidates load date
+    COALESCE(trans.provider, 'na') AS provider,                       -- Defaults mobile provider to 'na' if not available
+    COALESCE(trans.activity, 'na') AS activity,                       -- Defaults mobile activity to 'na' if not available
+    COALESCE(trans.spendby, 'na') AS spendby,                         -- Defaults POS spendby to 'na' if not available
+    COALESCE(trans.city, 'unknown') AS city,                          -- Defaults city to 'unknown' if not available
+    COALESCE(trans.state, 'unknown') AS state,                        -- Defaults state to 'unknown' if not available
+    COALESCE(cust.productcategory, trans.category) AS online_pos_category, -- Consolidates product category from online or POS
+    trans.product,                                                    -- Product name, primarily from POS
+    COALESCE(trans.pos_loadts, trans.mob_loadts, cust.consumer_loadts) AS loadts, -- Consolidates load timestamp from available sources
+    COALESCE(trans.pos_loaddt, trans.mob_loaddt, cust.consumer_loaddt) AS loaddt  -- Consolidates load date from available sources
 FROM
     cust_online_trans AS cust -- Left join with the combined customer and online transactions
 LEFT OUTER JOIN
     pos_mob_trans AS trans    -- Outer join with the combined POS and mobile transactions
 ON
-    trans.custno = cust.custno; -- Joins on customer number
+    trans.custno = cust.custno; -- Links the two CTEs on customer number
 
 -- Create discoveryds.trans_aggr table for aggregated transaction data
 -- This table stores summarized transaction metrics, useful for reporting and dashboards.

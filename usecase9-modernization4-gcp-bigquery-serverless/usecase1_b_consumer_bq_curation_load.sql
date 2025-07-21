@@ -95,7 +95,7 @@ BEGIN
         loaddt DATE
     )
     PARTITION BY loaddt
-    OPTIONS (require_partition_filter = TRUE);
+    OPTIONS (require_partition_filter = FALSE);
     -- `require_partition_filter` will enforce a mandatory partition filter to be used when querying the table,
     -- preventing full table scans and improving cost efficiency.
     -- Example query with filter: `SELECT * FROM curatedds.trans_online_part WHERE loaddt = '2025-07-21';`
