@@ -27,6 +27,42 @@ This is the entry point for raw transactional data. All raw data is ingested int
 * **BigQuery (Overwrite (EL)) Load Command:**
     * Handles `CSV load` with `Skip header` for `Consumer Data`.
 
+**Prerequisties:**
+```bash
+gcloud auth login
+```
+**Ensure to copy the code into codebase bucket and custs data**
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+cd ~/Downloads/ 
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_d_consumer_bq_Outbound_data_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_consumer_bq_raw_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_c_consumer_bq_discovery_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_b_consumer_bq_curation_load.sql gs://iz-cloud-training-project-bucket/codebase/
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/dataset/*.* gs://iz-cloud-training-project-bucket/datasets/
+
+#dataset verification : custs
+gsutil ls gs://iz-cloud-training-project-bucket/dataset/
+```
+
+## Step1 :: Detail: Loading the data into RAW (Bronze) Layer
+This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
+
+<details>
+  <summary>Click here to view flow diagram</summary>
+    <img src="images/usecase9_step1.png" alt="E2E Diagram">
+</details>
+
+Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_consumer_bq_raw_load.sql ~/Downloads/
+bq query --use_legacy_sql=false < usecase1_consumer_bq_raw_load.sql
+```
+
 ### 2. Curated Layer
 
 This layer transforms raw data into a clean, structured, and curated format suitable for analysis.
@@ -71,44 +107,3 @@ The final layer where processed data is consumed by various stakeholders and dow
 * **Visualization & Dashboarding:** Looker
 * **Data Ingestion:** CSV, JSON (with auto-schema detection capabilities)
 
-**Prerequisties:**
-```bash
-gcloud auth login
-```
-**Ensure to copy the code into codebase bucket and custs data**
-```bash
-#Use your local PC/VM and make sure gcloud is already installed
-cd ~/Downloads/ 
-git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
-
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_d_consumer_bq_Outbound_data_load.sql gs://iz-cloud-training-project-bucket/codebase/
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_consumer_bq_raw_load.sql gs://iz-cloud-training-project-bucket/codebase/
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_c_consumer_bq_discovery_load.sql gs://iz-cloud-training-project-bucket/codebase/
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/usecase1_b_consumer_bq_curation_load.sql gs://iz-cloud-training-project-bucket/codebase/
-
-gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase9-modernization4-gcp-bigquery-serverless/dataset/*.* gs://iz-cloud-training-project-bucket/datasets/
-
-#dataset verification : custs
-gsutil ls gs://iz-cloud-training-project-bucket/dataset/
-```
-
-
-## Step1 :: Detail: Loading the RAW (Bronze) Layer
-This section details the initial loading process for the RAW Layer (also referred to as the Bronze Layer) using different BigQuery load commands based on data type.
-
-<details>
-  <summary>Click here to view flow diagram</summary>
-    <img src="images/usecase9_step1.png" alt="E2E Diagram">
-</details>
-
-Either in the BQ Console or using bq command run in Cloud shell use the below query to create a raw tables
-```bash
-cd ~/Downloads
-gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_consumer_bq_raw_load.sql ~/Downloads/
-bq query --use_legacy_sql=false < usecase1_consumer_bq_raw_load.sql
-```
-## Step 2
-
-## Step 3
-
-## Step 4
