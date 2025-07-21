@@ -1,8 +1,15 @@
+/*
+Author : muralitheda
+*/
+
 -- Variable Declaration and Initialization
 -- In BigQuery, DECLARE and SET are used to define and assign values to variables,
 -- similar to variable assignment in procedural languages (e.g., load_ts = datetime.now() in Python).
 DECLARE loadts TIMESTAMP;
+DECLARE current_dt DATE;
+
 SET loadts = (SELECT CURRENT_TIMESTAMP());
+SET current_dt = CURRENT_DATE();
 -- Example value: loadts = 2025-07-21 08:04:11 PM IST (reflecting current timestamp)
 
 BEGIN
@@ -270,7 +277,11 @@ BEGIN
     -- This `DELETE` statement based on load date is placed at the beginning of the each query file
     -- to ensure job restartability and proper re-runs.
     -- This is crucial as BigQuery does not support `INSERT OVERWRITE PARTITION` like Hive.
-    DELETE FROM curatedds.trans_online_part WHERE loaddt = DATE(loadts);
+
+    ----[error] DELETE FROM curatedds.trans_online_part WHERE loaddt = DATE(loadts);
+
+
+    DELETE FROM curatedds.trans_online_part WHERE loaddt = current_dt;
 
     -- Loading of partitioned table in BigQuery:
     -- As like Hive, we don't need `partition()` clause, and we can't use `INSERT OVERWRITE`.
