@@ -39,3 +39,12 @@ This README outlines various use cases for Dataproc clusters, focusing on data m
 * Learned about Cloud Modernization & Cost Saving measures by scheduling PySpark in Dataproc Ephemeral Cluster using Composer (Airflow) (Pay For Use!).
 * Learned about Cloud Modernization & Cost Saving measures by scheduling PySpark in Serverless Spark Cluster using Composer (Airflow) (Pay Per Use!).
 * Learned how to enable and do Autoscaling in Dataproc (LR & EPH), and how Serverless will do Autoscaling on its own.
+
+
+### Usecase 9 – Modernizing using GCP BigQuery E2E
+
+**Objective:** To demonstrate and implement a full BigQuery data pipeline, loading raw data, then transforming and curating it into analytical layers using various loading methods and advanced SQL.
+
+* Learned about Practical skills in BigQuery data loading.  
+* Learned about advanced SQL for complex data transformation and curation (including procedural logic and optimization).  
+* creating layered data architectures, and real-world data engineering tasks using Google Cloud's `gsutil` and `bq` commands.

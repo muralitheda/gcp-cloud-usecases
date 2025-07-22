@@ -151,3 +151,20 @@ bq query --use_legacy_sql=false < usecase1_d_consumer_bq_Outbound_data_load.sql
 * **Visualization & Dashboarding:** Looker
 * **Data Ingestion:** CSV, JSON (with auto-schema detection capabilities)
 
+## Additional MetaData Queries
+
+```sql
+
+--To see the Table column details
+select * from iz-cloud-training-project.rawds.INFORMATION_SCHEMA.COLUMNS where table_name='consumer';
+
+--To see the Table DDL & other details
+select ddl,* from iz-cloud-training-project.rawds.INFORMATION_SCHEMA.TABLES where table_name='consumer';
+
+--To see the Table partition details
+select * from iz-cloud-training-project.curatedds.INFORMATION_SCHEMA.PARTITIONS; 
+
+--To see the Materialized view informations
+select * from iz-cloud-training-project.curatedds.INFORMATION_SCHEMA.TABLES where table_type='MATERIALIZED VIEW'; 
+
+```
