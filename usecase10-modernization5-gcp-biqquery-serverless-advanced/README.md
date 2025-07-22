@@ -56,4 +56,3 @@ This usecase demonstrates a **cloud-native, serverless data warehouse pipeline**
 * Applying **SCD1/SCD2 merge logic** for historical tracking
 * Building dashboards and ML-ready datasets from curated layers
 
-Let me know if you'd like this formatted into a slide or documentation format!
