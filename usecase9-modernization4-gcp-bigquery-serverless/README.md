@@ -62,6 +62,17 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_consumer_bq_ra
 bq query --use_legacy_sql=false < usecase1_consumer_bq_raw_load.sql
 ```
 
+Data loading techniques from Google Cloud Storage into BigQuery's "RAW Layer":
+
+* **Schema & Logging:** Creates a dataset (`rawds`) and an `audit_meta` table to log loading process steps.
+* **Diverse Loading Methods:** Shows `LOAD DATA OVERWRITE` for:
+    * CSV with a predefined schema and skipped header rows (`rawds.consumer`).
+    * CSV with inline schema definition (`rawds.trans_pos`).
+    * JSON with auto-detected schema (`rawds.trans_online`).
+    * CSV with auto-detected schema (`rawds.trans_mobile_channel`).
+* **Complete Overwrite:** All loads perform a full replacement of existing table data.
+
+
 ### 2. Curated Layer
 
 This layer transforms raw data into a clean, structured, and curated format suitable for analysis.
