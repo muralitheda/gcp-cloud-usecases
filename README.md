@@ -41,10 +41,20 @@ This README outlines various use cases for Dataproc clusters, focusing on data m
 * Learned how to enable and do Autoscaling in Dataproc (LR & EPH), and how Serverless will do Autoscaling on its own.
 
 
-### Usecase 9 – Modernizing using GCP BigQuery E2E
+### Usecase 9 – Modernizing#1 using GCP BigQuery E2E Serverless Data Pipeline
 
 **Objective:** To demonstrate and implement a full BigQuery data pipeline, loading raw data, then transforming and curating it into analytical layers using various loading methods and advanced SQL.
 
 * Learned about Practical skills in BigQuery data loading.  
 * Learned about advanced SQL for complex data transformation and curation (including procedural logic and optimization).  
 * creating layered data architectures, and real-world data engineering tasks using Google Cloud's `gsutil` and `bq` commands.
+
+### Usecase 10 – Modernizing#2 using GCP BigQuery E2E Serverless Data Pipeline
+
+**Objective:** **Serverless end-to-end data pipeline** using **BigQuery and BigLake**, where data from external sources is curated and visualized for analytics and AI/ML.
+
+* How to use **BigLake external tables** in BigQuery
+* Perform **ETL using stored procedures and dynamic SQL**
+* Apply **SCD1/SCD2 merge logic**
+* Build **dashboards with Data Studio**
+* Enable **AI/ML and decision support** from curated data
