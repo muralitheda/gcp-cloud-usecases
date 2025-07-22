@@ -96,6 +96,26 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_b_consumer_bq_
 bq query --use_legacy_sql=false < usecase1_b_consumer_bq_curation_load.sql
 ```
 
+This BigQuery SQL script handles data curation for the `curatedds` layer, applying transformations and loading data into various table types.
+
+**Key Techniques:**
+
+* **Variable Management:** Uses `DECLARE` and `SET` for session-scoped variables (`loadts`, `current_dt`).
+* **Schema & Table Definitions:**
+    * Creates the `curatedds` schema.
+    * Defines tables using `CREATE OR REPLACE TABLE` (for full refresh) and `CREATE TABLE IF NOT EXISTS`.
+    * Utilizes BigQuery's **partitioning** (`PARTITION BY loaddt` or `_PARTITIONDATE`) and **clustering** (`CLUSTER BY`) for performance and cost optimization.
+* **Data Curation & Transformation:**
+    * **Data Cleansing:** Deduplication (`ROW_NUMBER()`), `COALESCE` for null handling, `REGEXP_REPLACE` for string manipulation, `CASE WHEN` for standardization.
+    * **Data Enrichment:** Concatenating strings (`CONCAT`), deriving new columns (`yearofbirth`), converting data types (`PARSE_DATE`, `TIMESTAMP`, `ST_GEOGPOINT` for geo-coordinates).
+    * **Semi-structured Data Handling:** `UNNEST` to flatten nested JSON structures.
+    * **Data Quality:** Corrects future dates to `CURRENT_DATE()`.
+* **Loading Strategies:**
+    * **Idempotent Loads:** Employs `DELETE FROM` before `INSERT INTO` for partitioned tables to ensure re-runnability, compensating for BigQuery's lack of `INSERT OVERWRITE PARTITION`.
+    * **Temporary Tables:** `CREATE OR REPLACE TEMP TABLE` to store intermediate results for complex transformations, improving performance and readability.
+    * **Yearly Table Segregation:** Creates separate tables per year (e.g., `_2021`, `_2022`, `_2023`) for mobile transactions, leveraging BigQuery's wildcard query capabilities.
+* **Column Selection:** Uses `* EXCEPT()` for concise column selection while performing transformations.
+  
 ### 3. Analytical Layer
 
 This layer prepares the curated data for various analytical and consumption purposes, focusing on business insights.
@@ -119,6 +139,21 @@ cd ~/Downloads
 gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_c_consumer_bq_discovery_load.sql ~/Downloads/
 bq query --use_legacy_sql=false < usecase1_c_consumer_bq_discovery_load.sql
 ```
+
+This BigQuery script creates "Discovery Layer" tables for analytics.
+
+**Key Techniques:**
+
+* **Schema & Table Setup:** Creates `discoveryds` schema and defines denormalized (`consumer_trans_pos_mob_online`) and aggregated (`trans_aggr`) tables.
+* **Data Wrangling with CTEs:**
+    * Uses `WITH` clauses (`pos_mob_trans`, `cust_online_trans`) to combine data from various curated sources (`FULL JOIN`, `LEFT JOIN`).
+    * Employs **wildcard table queries** (`_20*`) for multi-year mobile transaction data.
+    * Leverages `COALESCE` and `CASE WHEN` for data consolidation, standardization, and handling missing values across channels.
+* **Final Denormalization:** Joins the CTEs to create a wide, comprehensive fact table, prioritizing and merging data intelligently.
+* **Aggregation:**
+    * `TRUNCATE TABLE` for idempotent loads.
+    * Uses `INNER JOIN` to combine necessary data.
+    * Applies aggregate functions like `MAX`, `MIN`, `SUM`, `APPROX_COUNT_DISTINCT`, and `COUNTIF` to generate summarized metrics, grouped by key dimensions.
 
 ### 4. Consumption Layer
 
@@ -148,6 +183,29 @@ cd ~/Downloads
 gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase1_d_consumer_bq_Outbound_data_load.sql ~/Downloads/
 bq query --use_legacy_sql=false < usecase1_d_consumer_bq_Outbound_data_load.sql
 ```
+
+This BigQuery SQL script exports data from the `curatedds.trans_pos_part_cluster` table to Google Cloud Storage as CSV.
+
+**Key Techniques:**
+
+* **Data Export:** Uses `EXPORT DATA` to save query results to GCS.
+    * **Options:** Specifies `uri` (GCS path with wildcard for sharding), `format` (CSV), `overwrite` (true), `header` (true), and `field_delimiter`.
+* **String Functions:**
+    * `SEARCH()`: Checks for substring existence.
+    * `STRPOS()`: Finds the position of a substring.
+    * `RPAD()`: Pads a string to a specified length.
+    * `REVERSE()`: Reverses a string.
+    * `LENGTH()`: Gets the length of a string.
+* **Window Functions (Analytic Functions):** Applied `OVER(PARTITION BY custno ORDER BY amount)` to calculate values based on groups of customer transactions.
+    * `ROW_NUMBER()`: Assigns a unique, sequential number within each customer group.
+    * `RANK()`: Assigns ranks with gaps for ties.
+    * `DENSE_RANK()`: Assigns ranks without gaps for ties.
+    * `CUME_DIST()`: Calculates cumulative distribution.
+    * `FIRST_VALUE()`: Returns the first value in a window.
+    * `NTH_VALUE(n)`: Returns the nth value in a window.
+    * `LEAD()`: Accesses data from a subsequent row.
+    * `LAG()`: Accesses data from a preceding row.
+* **Filtering:** `WHERE loaddt = CURRENT_DATE()` filters data to include only records from the current day.
 
 ## Key Stakeholders
 
