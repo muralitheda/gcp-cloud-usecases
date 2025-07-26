@@ -170,6 +170,7 @@ bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd1_
 Either in the BQ Console or using bq command run in Cloud shell use
 ```sql
 cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql ~/Downloads/
 gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10-modernization5-gcp-biqquery-serverless-advanced/usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql ~/Downloads/
 
 --=========================== 1st LOAD ================================
