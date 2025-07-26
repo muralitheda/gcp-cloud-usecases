@@ -62,7 +62,8 @@ gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase10-modernization5-gcp
 
 ```
 
-**Step1 :: Loading the raw partition data into BigQuery**  
+**Step1 :: Loading the raw partition data into BigQuery**
+---
 
 Either in the BQ Console or using bq command run in Cloud shell use
 ```sql
@@ -162,6 +163,32 @@ bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd1_
 +---------+--------------------+-----+------------------------+------------+---------------------+
 
 ```
+
+**Step2 :: Loading the raw partition data into BigQuery using stored procedure automation**
+---
+
+Either in the BQ Console or using bq command run in Cloud shell use
+```sql
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10-modernization5-gcp-biqquery-serverless-advanced/usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql ~/Downloads/
+
+-- Example setup for metadata-driven approach (uncomment and run if 'curatedds.etl_meta' table doesn't exist)
+bq query --use_legacy_sql=false 'create table curatedds.etl_meta (id int64,rulesql string);'
+bq query --use_legacy_sql=false 'insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");'
+
+--=========================== 1st LOAD ================================
+-- Checking the data
+gsutil cat gs://iz-cloud-training-project-bucket/data/custs_header_20250701
+
+custid,firstname,lastname,age,profession,upd_ts
+4000011,Francis,McNamara,47,Therapist,2024-08-01 00:00:01
+4000012,Sandy,Raynor,26,Writer,2024-08-01 00:00:01
+4000013,Marion,Moon,41,Carpenter,2024-08-01 00:00:01
+
+-- Main Execution
+bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
+```
+
 
 ### 🎯 **Key Learning Outcomes:**
 
