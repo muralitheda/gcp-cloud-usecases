@@ -184,13 +184,111 @@ custid,firstname,lastname,age,profession,upd_ts
 -- Stored procedure creation in BQ
 bq query --use_legacy_sql=false < usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql
 
--- Execution
+-- 1. Execution
 bq query --use_legacy_sql=false "CALL curatedds.sp_cust_etl('gs://iz-cloud-training-project-bucket/data/custs_header_20250701','scd1');"
 
 -- Verification
 bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+----------+-----+------------+---------------------+
+| custno  | firstname | lastname | age | profession |       upd_ts        |
++---------+-----------+----------+-----+------------+---------------------+
+| 4000011 | Francis   | McNamara |  47 | Therapist  | 2024-08-01 00:00:01 |
+| 4000012 | Sandy     | Raynor   |  26 | Writer     | 2024-08-01 00:00:01 |
+| 4000013 | Marion    | Moon     |  41 | Carpenter  | 2024-08-01 00:00:01 |
++---------+-----------+----------+-----+------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated order by upd_ts;'
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_merge order by upd_ts;'
++---------+------------------+-----+------------+------------+---------------------+
+| custno  |       name       | age | profession |   datadt   |       upd_ts        |
++---------+------------------+-----+------------+------------+---------------------+
+| 4000011 | Francis,McNamara |  47 | Therapist  | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor     |  26 | Writer     | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon      |  41 | Carpenter  | 2025-07-01 | 2024-08-01 00:00:01 |
++---------+------------------+-----+------------+------------+---------------------+
+
+
+-- 2. Execution
+bq query --use_legacy_sql=false "CALL curatedds.sp_cust_etl('gs://iz-cloud-training-project-bucket/data/custs_header_20250702','scd1');"
+
+-- Verification
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+-----------+-----+------------------------+---------------------+
+| custno  | firstname | lastname  | age |       profession       |       upd_ts        |
++---------+-----------+-----------+-----+------------------------+---------------------+
+| 4000019 | Kristine  | Dougherty |  63 | Financial analyst      | 2025-07-02 00:00:01 |
+| 4000020 | Crystal   | Powers    |  67 | Engineering technician | 2025-07-02 00:00:01 |
+| 4000012 | Sandy     | Raynor    |  26 | Editor                 | 2025-07-02 00:10:01 |
++---------+-----------+-----------+-----+------------------------+---------------------+
+
 bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated order by upd_ts;'
 bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_merge order by upd_ts;'
++---------+--------------------+-----+------------------------+------------+---------------------+
+| custno  |        name        | age |       profession       |   datadt   |       upd_ts        |
++---------+--------------------+-----+------------------------+------------+---------------------+
+| 4000011 | Francis,McNamara   |  47 | Therapist              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon        |  41 | Carpenter              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000019 | Kristine,Dougherty |  63 | Financial analyst      | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000020 | Crystal,Powers     |  67 | Engineering technician | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Editor                 | 2025-07-02 | 2025-07-02 00:10:01 |
++---------+--------------------+-----+------------------------+------------+---------------------+
+
+
+--=========================== 2nd LOAD ================================
+-- 1. Execution
+bq query --use_legacy_sql=false "CALL curatedds.sp_cust_etl('gs://iz-cloud-training-project-bucket/data/custs_header_20250701','scd2');"
+
+-- Verification
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+----------+-----+------------+---------------------+
+| custno  | firstname | lastname | age | profession |       upd_ts        |
++---------+-----------+----------+-----+------------+---------------------+
+| 4000011 | Francis   | McNamara |  47 | Therapist  | 2024-08-01 00:00:01 |
+| 4000012 | Sandy     | Raynor   |  26 | Writer     | 2024-08-01 00:00:01 |
+| 4000013 | Marion    | Moon     |  41 | Carpenter  | 2024-08-01 00:00:01 |
++---------+-----------+----------+-----+------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated order by upd_ts;'
++---------+------------------+-----+------------+------------+---------------------+
+| custno  |       name       | age | profession |   datadt   |       upd_ts        |
++---------+------------------+-----+------------+------------+---------------------+
+| 4000011 | Francis,McNamara |  47 | Therapist  | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor     |  26 | Writer     | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon      |  41 | Carpenter  | 2025-07-01 | 2024-08-01 00:00:01 |
++---------+------------------+-----+------------+------------+---------------------+
+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_merge order by upd_ts;'
+
+
+-- 2. Execution
+bq query --use_legacy_sql=false "CALL curatedds.sp_cust_etl('gs://iz-cloud-training-project-bucket/data/custs_header_20250702','scd2');"
+
+-- Verification
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+-----------+-----+------------------------+---------------------+
+| custno  | firstname | lastname  | age |       profession       |       upd_ts        |
++---------+-----------+-----------+-----+------------------------+---------------------+
+| 4000019 | Kristine  | Dougherty |  63 | Financial analyst      | 2025-07-02 00:00:01 |
+| 4000020 | Crystal   | Powers    |  67 | Engineering technician | 2025-07-02 00:00:01 |
+| 4000012 | Sandy     | Raynor    |  26 | Editor                 | 2025-07-02 00:10:01 |
++---------+-----------+-----------+-----+------------------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated order by upd_ts;'
++---------+--------------------+-----+------------------------+------------+---------------------+
+| custno  |        name        | age |       profession       |   datadt   |       upd_ts        |
++---------+--------------------+-----+------------------------+------------+---------------------+
+| 4000011 | Francis,McNamara   |  47 | Therapist              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Writer                 | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon        |  41 | Carpenter              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000019 | Kristine,Dougherty |  63 | Financial analyst      | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000020 | Crystal,Powers     |  67 | Engineering technician | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Editor                 | 2025-07-02 | 2025-07-02 00:10:01 |
++---------+--------------------+-----+------------------------+------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_merge order by upd_ts;'
+
 
 ```
 
