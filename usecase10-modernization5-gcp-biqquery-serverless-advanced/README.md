@@ -185,8 +185,17 @@ custid,firstname,lastname,age,profession,upd_ts
 4000012,Sandy,Raynor,26,Writer,2024-08-01 00:00:01
 4000013,Marion,Moon,41,Carpenter,2024-08-01 00:00:01
 
--- Main Execution
-bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
+-- Stored procedure creation in BQ
+bq query --use_legacy_sql=false < usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql
+
+-- Execution
+bq query --use_legacy_sql=false "CALL curatedds.sp_cust_etl('gs://iz-cloud-training-project-bucket/data/custs_header_20250701','scd1');"
+
+-- Verification
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated order by upd_ts;'
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_merge order by upd_ts;'
+
 ```
 
 
