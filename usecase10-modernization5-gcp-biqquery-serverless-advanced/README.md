@@ -73,6 +73,7 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10_a_consumer_bq
 bq query --use_legacy_sql=false 'create table curatedds.etl_meta (id int64,rulesql string);'
 bq query --use_legacy_sql=false 'insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");'
 
+--=========================== 1st LOAD ================================
 -- Checking the data
 gsutil cat gs://iz-cloud-training-project-bucket/data/custs_header_20250701
 
@@ -86,8 +87,79 @@ bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
 
 -- Verification
 bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+----------+-----+------------+---------------------+
+| custno  | firstname | lastname | age | profession |       upd_ts        |
++---------+-----------+----------+-----+------------+---------------------+
+| 4000011 | Francis   | McNamara |  47 | Therapist  | 2024-08-01 00:00:01 |
+| 4000012 | Sandy     | Raynor   |  26 | Writer     | 2024-08-01 00:00:01 |
+| 4000013 | Marion    | Moon     |  41 | Carpenter  | 2024-08-01 00:00:01 |
++---------+-----------+----------+-----+------------+---------------------+
+
 bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd2_append order by upd_ts;'
++---------+------------------+-----+------------+------------+---------------------+
+| custno  |       name       | age | profession |   datadt   |       upd_ts        |
++---------+------------------+-----+------------+------------+---------------------+
+| 4000011 | Francis,McNamara |  47 | Therapist  | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor     |  26 | Writer     | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon      |  41 | Carpenter  | 2025-07-01 | 2024-08-01 00:00:01 |
++---------+------------------+-----+------------+------------+---------------------+
+
 bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd1_merge order by upd_ts;'
++---------+------------------+-----+------------+------------+---------------------+
+| custno  |       name       | age | profession |   datadt   |       upd_ts        |
++---------+------------------+-----+------------+------------+---------------------+
+| 4000011 | Francis,McNamara |  47 | Therapist  | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor     |  26 | Writer     | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon      |  41 | Carpenter  | 2025-07-01 | 2024-08-01 00:00:01 |
++---------+------------------+-----+------------+------------+---------------------+
+
+--=========================== 2nd LOAD ================================
+-- Checking the data
+gsutil cat gs://iz-cloud-training-project-bucket/data/custs_header_20250702
+
+custid,firstname,lastname,age,profession
+4000012,Sandy,Raynor,26,Editor,2025-07-02 00:10:01
+4000019,Kristine,Dougherty,63,Financial analyst,2025-07-02 00:00:01
+4000020,Crystal,Powers,67,Engineering technician,2025-07-02 00:00:01
+
+--Prepare data
+bq query --use_legacy_sql=false 'update curatedds.etl_meta set rulesql="gs://iz-cloud-training-project-bucket/data/custs_header_20250702" where id =3'
+
+-- Main Execution
+bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
+
+-- Verification
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
++---------+-----------+-----------+-----+------------------------+---------------------+
+| custno  | firstname | lastname  | age |       profession       |       upd_ts        |
++---------+-----------+-----------+-----+------------------------+---------------------+
+| 4000019 | Kristine  | Dougherty |  63 | Financial analyst      | 2025-07-02 00:00:01 |
+| 4000020 | Crystal   | Powers    |  67 | Engineering technician | 2025-07-02 00:00:01 |
+| 4000012 | Sandy     | Raynor    |  26 | Editor                 | 2025-07-02 00:10:01 |
++---------+-----------+-----------+-----+------------------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd2_append order by upd_ts;'
++---------+--------------------+-----+------------------------+------------+---------------------+
+| custno  |        name        | age |       profession       |   datadt   |       upd_ts        |
++---------+--------------------+-----+------------------------+------------+---------------------+
+| 4000011 | Francis,McNamara   |  47 | Therapist              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Writer                 | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon        |  41 | Carpenter              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000019 | Kristine,Dougherty |  63 | Financial analyst      | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000020 | Crystal,Powers     |  67 | Engineering technician | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Editor                 | 2025-07-02 | 2025-07-02 00:10:01 |
++---------+--------------------+-----+------------------------+------------+---------------------+
+
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd1_merge order by upd_ts;'
++---------+--------------------+-----+------------------------+------------+---------------------+
+| custno  |        name        | age |       profession       |   datadt   |       upd_ts        |
++---------+--------------------+-----+------------------------+------------+---------------------+
+| 4000011 | Francis,McNamara   |  47 | Therapist              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000013 | Marion,Moon        |  41 | Carpenter              | 2025-07-01 | 2024-08-01 00:00:01 |
+| 4000019 | Kristine,Dougherty |  63 | Financial analyst      | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000020 | Crystal,Powers     |  67 | Engineering technician | 2025-07-02 | 2025-07-02 00:00:01 |
+| 4000012 | Sandy,Raynor       |  26 | Editor                 | 2025-07-02 | 2025-07-02 00:10:01 |
++---------+--------------------+-----+------------------------+------------+---------------------+
 
 ```
 
