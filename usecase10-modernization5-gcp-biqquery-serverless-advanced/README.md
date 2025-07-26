@@ -65,7 +65,7 @@ gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase10-modernization5-gcp
 **Step1 :: Loading the raw partition data into BigQuery**  
 
 Either in the BQ Console or using bq command run in Cloud shell use
-```bash
+```sql
 cd ~/Downloads
 gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10_a_consumer_bq_raw_partition_load.sql ~/Downloads/
 
