@@ -2,8 +2,8 @@
 Author: muralitheda
 Date: July 26, 2025
 Description: This script demonstrates key data warehousing and data lake concepts
-             including Data Lakes, Lakehouses, Google Cloud's BigLake, dynamic SQL,
-             and Slowly Changing Dimensions (SCD) Type 1 and Type 2 implementations.
+             including Data Lakes, Lakehouses, Google Cloud's BigLake, dynamic SQL, Change Data Capture (CDC) for Source
+             and Slowly Changing Dimensions (SCD) Type 1 and Type 2 implementations for Target.
 */
 
 /*
@@ -34,11 +34,11 @@ DECLARE dynamicsql STRING;
 
 -- Example setup for metadata-driven approach (uncomment and run if 'curatedds.etl_meta' table doesn't exist)
 -- create table curatedds.etl_meta (id int64,rulesql string);
--- insert into curatedds.etl_meta values(3,"gs://consumer-analytics-bucket/data/custs_header_20250701");
+-- insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");
 
 SET v_uri = (SELECT rulesql FROM curatedds.etl_meta WHERE id = 3); -- metadata driven approach
 -- Alternatively, set v_uri directly:
--- SET v_uri = 'gs://consumer-analytics-bucket/data/custs_header_20250701';
+-- SET v_uri = 'gs://iz-cloud-training-project-bucket/data/custs_header_20250701';
 
 SET v_datadtraw = (SELECT RIGHT(v_uri, 8)); -- Extracts the date part from the URI
 SET v_datadt = (SELECT PARSE_DATE('%Y%m%d', v_datadtraw)); -- Converts the extracted string to a DATE type
@@ -67,7 +67,7 @@ OPTIONS (
 BEGIN
 
     -- Example of a static external table creation (commented out)
-    -- CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING) OPTIONS (   format = "CSV", uris = ["gs://incpetez-data-samples/dataset/bqdata/ext_src_data/custs_header_20230908"],max_bad_records = 2, skip_leading_rows=1);
+    -- CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING) OPTIONS (   format = "CSV", uris = ["gs://data-samples/dataset/bqdata/ext_src_data/custs_header_20230908"],max_bad_records = 2, skip_leading_rows=1);
 
     -- Execute the dynamically built SQL query to create the BigLake external table.
     EXECUTE IMMEDIATE dynamicsql;
