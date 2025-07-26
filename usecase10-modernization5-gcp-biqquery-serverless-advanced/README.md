@@ -47,7 +47,35 @@ This usecase demonstrates a **cloud-native, serverless data warehouse pipeline**
 * **Data Analysts**: Perform in-depth data analysis
 * **Clients/Business Users**: Use output for business insights
 
----
+**Prerequisties:**
+```bash
+gcloud auth login
+```
+**Ensure to copy the code into codebase bucket and custs data**
+```bash
+#Use your local PC/VM and make sure gcloud is already installed
+cd ~/Downloads/ 
+git clone https://github.com/muralitheda/gcp-cloud-usecases.git #copy his repo url from github  
+
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase10-modernization5-gcp-biqquery-serverless-advanced/usecase10_a_consumer_bq_raw_partition_load.sql gs://iz-cloud-training-project-bucket/codebase/
+gsutil cp /home/hduser/Downloads/gcp-cloud-usecases/usecase10-modernization5-gcp-biqquery-serverless-advanced/usecase10_b_sp_automation_consumer_bq_raw_partition_load.sql gs://iz-cloud-training-project-bucket/codebase/
+
+```
+
+**Step1 :: Loading the raw partition data into BigQuery**  
+
+Either in the BQ Console or using bq command run in Cloud shell use
+```bash
+cd ~/Downloads
+gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10_a_consumer_bq_raw_partition_load.sql ~/Downloads/
+
+-- Example setup for metadata-driven approach (uncomment and run if 'curatedds.etl_meta' table doesn't exist)
+bq query --use_legacy_sql=false 'create table curatedds.etl_meta (id int64,rulesql string);'
+bq query --use_legacy_sql=false 'insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");''
+
+-- Main Execution
+bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
+```
 
 ### 🎯 **Key Learning Outcomes:**
 
