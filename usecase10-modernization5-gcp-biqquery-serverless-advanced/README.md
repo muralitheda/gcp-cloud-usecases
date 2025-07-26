@@ -71,7 +71,7 @@ gsutil cp gs://iz-cloud-training-project-bucket/codebase/usecase10_a_consumer_bq
 
 -- Example setup for metadata-driven approach (uncomment and run if 'curatedds.etl_meta' table doesn't exist)
 bq query --use_legacy_sql=false 'create table curatedds.etl_meta (id int64,rulesql string);'
-bq query --use_legacy_sql=false 'insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");''
+bq query --use_legacy_sql=false 'insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");'
 
 -- Main Execution
 bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
