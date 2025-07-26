@@ -2,8 +2,8 @@
 Author: muralitheda
 Date: July 26, 2025
 Description: This script demonstrates key data warehousing and data lake concepts
-             including Data Lakes, Lakehouses, Google Cloud's BigLake, dynamic SQL, Change Data Capture (CDC) for Source
-             and Slowly Changing Dimensions (SCD) Type 1 and Type 2 implementations for Target.
+             including Data Lakes, Lakehouses, Google Cloud's BigLake, dynamic SQL,
+             and Slowly Changing Dimensions (SCD) Type 1 and Type 2 implementations.
 */
 
 /*
@@ -12,12 +12,7 @@ Concepts Added in this 10.A usecase:
 What is the difference between:
 - Datalake: A scalable file system storage layer that accepts any type/volume of data (raw, unstructured, semi-structured, structured).
 - Lakehouse (managed/native table): An architecture that enables data warehousing capabilities on top of a data lake by "owning" the data within the data lake. It combines the flexibility of data lakes with the structure and management features of data warehouses (e.g., ACID transactions, schema enforcement).
-- BigLake (External Table): A technology (specifically Google Cloud's) that enables data warehousing capabilities on top of a data lake by "referring" to the data in the data lake, rather than moving or owning it directly within the warehouse.
-
-External table restrictions (cloud side):
-- Data will not be stored in Colossus/Jupyter network (BigQuery's native storage).
-- Cannot be truncated, updated/deleted directly via BigQuery DML.
-- Data will not be dropped from the underlying storage if the external table is dropped.
+- BigLake (External Table): A technology (specifically Google Cloud's) that enables data warehousing capabilities on top of a data lake by "referring" to the data in the data lake, rather Data will not be dropped from the underlying storage if the external table is dropped.
 
 This script demonstrates the following concepts:
 1. BigLake (External Table Concept)
@@ -34,19 +29,20 @@ DECLARE dynamicsql STRING;
 
 -- Example setup for metadata-driven approach (uncomment and run if 'curatedds.etl_meta' table doesn't exist)
 -- create table curatedds.etl_meta (id int64,rulesql string);
--- insert into curatedds.etl_meta values(3,"gs://iz-cloud-training-project-bucket/data/custs_header_20250701");
+-- insert into curatedds.etl_meta values(3,"gs://consumer-analytics-bucket/data/custs_header_20250701");
 
 SET v_uri = (SELECT rulesql FROM curatedds.etl_meta WHERE id = 3); -- metadata driven approach
 -- Alternatively, set v_uri directly:
--- SET v_uri = 'gs://iz-cloud-training-project-bucket/data/custs_header_20250701';
+-- SET v_uri = 'gs://consumer-analytics-bucket/data/custs_header_20250701';
 
 SET v_datadtraw = (SELECT RIGHT(v_uri, 8)); -- Extracts the date part from the URI
 SET v_datadt = (SELECT PARSE_DATE('%Y%m%d', v_datadtraw)); -- Converts the extracted string to a DATE type
 
 -- CDC (Change Data Capture based on the date parameter suffixed in the filename)
 -- Constructing the dynamic SQL query to create or replace the BigLake external table.
--- This combines three different string parts, inserting the `v_uri` in the middle.
-SET dynamicsql = CONCAT('CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext (
+-- Using FORMAT for cleaner string interpolation, especially with newlines and embedded quotes.
+SET dynamicsql = FORMAT("""
+CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext (
     custno INT64,
     firstname STRING,
     lastname STRING,
@@ -56,18 +52,19 @@ SET dynamicsql = CONCAT('CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext (
 )
 OPTIONS (
     format = "CSV",
-    uris = ["', v_uri, '"],
+    uris = ['%s'], -- v_uri will be correctly enclosed in single quotes
     max_bad_records = 2,
     skip_leading_rows = 1
-)');
+)
+""", v_uri);
 
--- Alternative way to format dynamic SQL using FORMAT function (commented out)
--- SET dynamicsql = 'CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING,upd_ts timestamp) OPTIONS (   format = "CSV", uris = ["%s"],max_bad_records = 2, skip_leading_rows=1)';
+-- Alternative way to format dynamic SQL using CONCAT (original, potentially problematic)
+-- SET dynamicsql = CONCAT('CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING,upd_ts timestamp) OPTIONS (   format = "CSV", uris = [''', v_uri, '''],max_bad_records = 2, skip_leading_rows=1)');
 
 BEGIN
 
     -- Example of a static external table creation (commented out)
-    -- CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING) OPTIONS (   format = "CSV", uris = ["gs://data-samples/dataset/bqdata/ext_src_data/custs_header_20230908"],max_bad_records = 2, skip_leading_rows=1);
+    -- CREATE OR REPLACE EXTERNAL TABLE rawds.cust_ext ( custno INT64,firstname STRING,lastname STRING,age INT64,profession STRING) OPTIONS (   format = "CSV", uris = ["gs://incpetez-data-samples/dataset/bqdata/ext_src_data/custs_header_20230908"],max_bad_records = 2, skip_leading_rows=1);
 
     -- Execute the dynamically built SQL query to create the BigLake external table.
     EXECUTE IMMEDIATE dynamicsql;
