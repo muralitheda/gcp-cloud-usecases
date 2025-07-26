@@ -85,9 +85,9 @@ custid,firstname,lastname,age,profession,upd_ts
 bq query --use_legacy_sql=false < usecase10_a_consumer_bq_raw_partition_load.sql
 
 -- Verification
-select * from rawds.cust_ext order by upd_ts;
-select * from curatedds.cust_part_curated_scd2_append order by upd_ts;
-select * from curatedds.cust_part_curated_scd1_merge order by upd_ts;
+bq query --use_legacy_sql=false 'select * from rawds.cust_ext order by upd_ts;'
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd2_append order by upd_ts;'
+bq query --use_legacy_sql=false 'select * from curatedds.cust_part_curated_scd1_merge order by upd_ts;'
 
 ```
 
